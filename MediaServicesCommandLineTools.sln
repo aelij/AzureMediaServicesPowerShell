@@ -45,6 +45,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DecryptAsset", "DecryptAsse
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DownloadAsset", "DownloadAsset\DownloadAsset.csproj", "{8CF2292B-5618-4172-9562-AA4EAD997FA6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayReady", "PlayReady\PlayReady.csproj", "{CA595608-6CA1-4766-B030-87E4F834847A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskPresets", "TaskPresets\TaskPresets.csproj", "{F98AD8E5-26DD-4786-B66A-5D9EA656254A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -127,6 +131,14 @@ Global
 		{8CF2292B-5618-4172-9562-AA4EAD997FA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8CF2292B-5618-4172-9562-AA4EAD997FA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8CF2292B-5618-4172-9562-AA4EAD997FA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA595608-6CA1-4766-B030-87E4F834847A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA595608-6CA1-4766-B030-87E4F834847A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA595608-6CA1-4766-B030-87E4F834847A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA595608-6CA1-4766-B030-87E4F834847A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F98AD8E5-26DD-4786-B66A-5D9EA656254A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F98AD8E5-26DD-4786-B66A-5D9EA656254A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F98AD8E5-26DD-4786-B66A-5D9EA656254A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F98AD8E5-26DD-4786-B66A-5D9EA656254A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
