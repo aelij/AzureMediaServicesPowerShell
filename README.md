@@ -22,14 +22,18 @@ Bring up a cmd.exe prompt and change into the ..\bin directory.
 
 Run a command
 
-Jobs - Lists jobs
-Tasks <jobId> - list all the tasks taht are part of the specified job
-Assets - Lists assets
-AssetFiles <assetId> - Lists the files for an Asset
-Download <fileId> - downloads a file
-DownloadAsset <assetId> - downloads all the files for an asset
-ToMP4 <assetId> - creates a job to convert the given asset to MP4
-....
+    Jobs - Lists jobs
+    Tasks <jobId> - list all the tasks taht are part of the specified job
+    Assets - Lists assets
+    AssetFiles <assetId> - Lists the files for an Asset
+    Download <fileId> - downloads a file
+    DownloadAsset <assetId> - downloads all the files for an asset
+    ToMP4 <assetId> - creates a job to convert the given asset to MP4
+    ContentKeys - list content keys
+    CreateAsset <filename> - upload and create a new asset from local file
+    TaskPresets - list the task presets
+    ErrorDetails <taskId> - Show error details of a failed task
+    StreamingUrl <assetId> - Create an Origin Locator for a SmoothStream asset
 
 
 
