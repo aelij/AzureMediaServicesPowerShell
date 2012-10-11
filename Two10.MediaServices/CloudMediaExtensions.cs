@@ -37,9 +37,21 @@ namespace Two10.MediaServices
                     
                     cloudMediaContext.Assets.Update(asset);
 
-                    cloudMediaContext.Assets.Delete(asset);
                 } 
                 catch (Exception e) {
+                    Console.Error.WriteLine("Cant remove content keys asset {0} {1}", asset.Id, e);
+                }
+
+            } 
+            
+            foreach (var asset in cloudMediaContext.Assets)
+            {
+                try
+                {
+                    cloudMediaContext.Assets.Delete(asset);
+                }
+                catch (Exception e)
+                {
                     Console.Error.WriteLine("Cant delete asset {0} {1}", asset.Id, e);
                 }
             }
