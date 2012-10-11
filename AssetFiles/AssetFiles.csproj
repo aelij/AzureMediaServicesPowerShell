@@ -53,6 +53,12 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Two10.MediaServices\Two10.MediaServices.csproj">
+      <Project>{a0d9d5a5-80c2-4359-96a1-09c0cb47b2d2}</Project>
+      <Name>Two10.MediaServices</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>set OutputPath="$(SolutionDir)bin\"

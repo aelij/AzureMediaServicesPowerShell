@@ -120,26 +120,25 @@ namespace Two10.MediaServices
 
         public static IAsset GetAssetById(this CloudMediaContext cloudMediaContext, string assetId)
         {
-            var assets =
-                from a in cloudMediaContext.Assets
-                where a.Id == assetId
-                select a;
 
-            IAsset asset = assets.FirstOrDefault();
+            foreach (var asset in cloudMediaContext.Assets)
+            {
+                if (asset.Id.EndsWith(assetId))
+                    return asset;
+            }
 
-            return asset;
+            return null;
         }
 
         public static IJob GetJobById(this CloudMediaContext cloudMediaContext, string jobId)
         {
-            var jobs =
-                from a in cloudMediaContext.Jobs
-                where a.Id == jobId
-                select a;
+            foreach (var job in cloudMediaContext.Jobs)
+            {
+                if (job.Id.EndsWith(jobId))
+                    return job;
+            }
 
-            IJob job = jobs.FirstOrDefault();
-
-            return job;
+            return null;
         }
 
         public static ITask GetTaskById(this CloudMediaContext cloudMediaContext, string taskId)
@@ -148,7 +147,7 @@ namespace Two10.MediaServices
             {
                 foreach (var task in job.Tasks)
                 {
-                    if (task.Id == taskId)
+                    if (task.Id.EndsWith(taskId))
                         return task;
                 }
             }
@@ -158,12 +157,8 @@ namespace Two10.MediaServices
 
         public static void DeleteAssetById(this CloudMediaContext cloudMediaContext, string assetId)
         {
-            var assets =
-                from a in cloudMediaContext.Assets
-                where a.Id == assetId
-                select a;
 
-            IAsset asset = assets.FirstOrDefault();
+            IAsset asset = CloudMediaContextExtensions.GetAssetById(cloudMediaContext, assetId);
 
             cloudMediaContext.Assets.Delete(asset);
 

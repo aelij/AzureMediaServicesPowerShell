@@ -18,6 +18,7 @@
 using Microsoft.WindowsAzure.MediaServices.Client;
 using System;
 using System.Linq;
+using Two10.MediaServices;
 
 namespace AssetFiles
 {
@@ -36,15 +37,9 @@ namespace AssetFiles
             CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
 
             string assetId = args[0];
+            IAsset asset = cloudMediaContext.GetAssetById(assetId);
 
-            var asset =
-                from a in cloudMediaContext.Assets
-                where a.Id == assetId
-                select a;
-
-            IAsset theAsset = asset.FirstOrDefault();
-
-            foreach (var file in theAsset.Files)
+            foreach (var file in asset.Files)
             {
                 Console.WriteLine("{0}\t{1}\t{2}", file.Id, file.Name, file.IsEncrypted);
             }
