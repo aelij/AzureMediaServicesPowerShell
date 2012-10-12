@@ -114,6 +114,17 @@ namespace Two10.MediaServices
             return null;
         }
 
+        public static IAccessPolicy FindAcessPolicyById(this CloudMediaContext cloudMediaContext, string acessPolicyId)
+        {
+            foreach (var accessPolicy in cloudMediaContext.AccessPolicies)
+            {
+                if (accessPolicy.Id.EndsWith(acessPolicyId))
+                    return accessPolicy;
+            }
+
+            return null;
+        }
+
         public static IJob FindJobById(this CloudMediaContext cloudMediaContext, string jobId)
         {
             foreach (var job in cloudMediaContext.Jobs)
