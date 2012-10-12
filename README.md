@@ -37,6 +37,18 @@ Run a command
 
 
 
+TODO
+----
+
+Test PlayReady
+
+HLS Streaming
+
+Thumbnailing
+
+More example format conversions
+
+
 Rob Blackwell
 
 October 2012

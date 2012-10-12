@@ -26,7 +26,7 @@ namespace PlayReady
     {
         static int Main(string[] args)
         {
-            if (args.Length != 1)
+            if (args.Length != 6)
             {
                 Console.Error.WriteLine("PlayReady <asset-id> <contentKey> <customAttributes> <keyId> <keySeedValue> <licenseAcquisitionUrl>");
                 return -1;
@@ -50,9 +50,8 @@ namespace PlayReady
             IMediaProcessor processor = cloudMediaContext.GetMediaProcessor("PlayReady Protection Task");
 
             string configuration = File.ReadAllText(Path.GetFullPath("PlayReady Protection.xml"));
-
-            
-            configuration = String.Format(configuration, contentKey, customAttributes, keyId, keySeedValue);
+    
+            configuration = String.Format(configuration, contentKey, customAttributes, keyId, keySeedValue, licenseAcquisitionUrl);
 
             ITask task = job.Tasks.AddNew("My PlayReady Protection Task",
                 processor,
