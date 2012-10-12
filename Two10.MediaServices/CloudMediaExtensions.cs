@@ -24,84 +24,6 @@ namespace Two10.MediaServices
     public static class CloudMediaContextExtensions
     {
 
-        public static void DeleteAllAssets(this CloudMediaContext cloudMediaContext)
-        {
-            foreach (var asset in cloudMediaContext.Assets)
-            {
-                try
-                {
-                    foreach (var key in asset.ContentKeys) {
-                        asset.ContentKeys.Remove(key);
-                    }
-                    
-                    cloudMediaContext.Assets.Update(asset);
-
-                } 
-                catch (Exception e) {
-                    Console.Error.WriteLine("Cant remove content keys for asset {0}, {1}", asset.Id, e);
-                }
-
-            } 
-            
-            foreach (var asset in cloudMediaContext.Assets)
-            {
-                try
-                {
-                    cloudMediaContext.Assets.Delete(asset);
-                }
-                catch (Exception e)
-                {
-                    Console.Error.WriteLine("Cant delete asset {0}, {1}", asset.Id, e);
-                }
-            }
-
-        }
-
-        public static void DeleteAllJobs(this CloudMediaContext cloudMediaContext)
-        {
-            foreach (var job in cloudMediaContext.Jobs)
-            {
-                try
-                {
-                    job.Delete();
-                }
-                catch (Exception e)
-                {
-                    Console.Error.WriteLine("Cant delete Job {0}, {1}", job.Id, e);
-                }
-            }
-        }
-
-        public static void DeleteAllAccessPolicies(this CloudMediaContext cloudMediaContext)
-        {
-            foreach (var accessPolicy in cloudMediaContext.AccessPolicies)
-            {
-                try
-                {
-                    cloudMediaContext.AccessPolicies.Delete(accessPolicy);
-                }
-                catch (Exception e)
-                {
-                    Console.Error.WriteLine("Cant delete access policy {0}, {1}", accessPolicy.Id, e);
-                }
-            }
-        }
-
-        public static void RevokeAllLocators(this CloudMediaContext cloudMediaContext)
-        {
-            foreach (var locator in cloudMediaContext.Locators)
-            {
-                try
-                {
-                    cloudMediaContext.Locators.Revoke(locator);
-                }
-                catch (Exception e)
-                {
-                    Console.Error.WriteLine("Cant revoke locator {0}, {1}", locator.Id, e);
-                }
-            }
-        }
-
         public static IAsset FindAssetById(this CloudMediaContext cloudMediaContext, string assetId)
         {
 
@@ -149,15 +71,6 @@ namespace Two10.MediaServices
 
             return null;
         }
-
-        //public static void DeleteAssetById(this CloudMediaContext cloudMediaContext, string assetId)
-        //{
-
-        //    IAsset asset = CloudMediaContextExtensions.FindAssetById(cloudMediaContext, assetId);
-
-        //    cloudMediaContext.Assets.Delete(asset);
-
-        //}
 
         public static IMediaProcessor GetMediaProcessor(this CloudMediaContext cloudMediaContext, string mediaProcessorName)
         {

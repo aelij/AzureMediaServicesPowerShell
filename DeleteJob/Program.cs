@@ -19,21 +19,29 @@ using Microsoft.WindowsAzure.MediaServices.Client;
 using System;
 using Two10.MediaServices;
 
-namespace Assets
+namespace DeleteJob
 {
     class Program
     {
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
-            string accountName = Environment.GetEnvironmentVariable("ACCOUNT_NAME");
-            string accountKey = Environment.GetEnvironmentVariable("ACCOUNT_KEY");
-            CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
-
-            foreach (var asset in cloudMediaContext.Assets)
+            if (args.Length != 1)
             {
-                Console.WriteLine("{0}\t{1}\t{2}\t{3}", asset.Id,asset.Name,asset.State,asset.LastModified);
+                Console.Error.WriteLine("DeleteJob <job-id>");
+                return -1;
             }
 
+            string accountName = Environment.GetEnvironmentVariable("ACCOUNT_NAME");
+            string accountKey = Environment.GetEnvironmentVariable("ACCOUNT_KEY");
+
+            CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
+
+            string jobId = args[0];
+            IJob job = cloudMediaContext.FindJobById(jobId);
+
+            job.Delete();
+
+            return 0;
         }
     }
 }
