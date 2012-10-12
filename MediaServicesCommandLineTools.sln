@@ -49,6 +49,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayReady", "PlayReady\Play
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskPresets", "TaskPresets\TaskPresets.csproj", "{F98AD8E5-26DD-4786-B66A-5D9EA656254A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeleteAsset", "DeleteAsset\DeleteAsset.csproj", "{4529DDC1-84D6-42EB-B599-B3DD732787E8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -139,6 +141,10 @@ Global
 		{F98AD8E5-26DD-4786-B66A-5D9EA656254A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F98AD8E5-26DD-4786-B66A-5D9EA656254A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F98AD8E5-26DD-4786-B66A-5D9EA656254A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4529DDC1-84D6-42EB-B599-B3DD732787E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4529DDC1-84D6-42EB-B599-B3DD732787E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4529DDC1-84D6-42EB-B599-B3DD732787E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4529DDC1-84D6-42EB-B599-B3DD732787E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

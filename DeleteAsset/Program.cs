@@ -17,10 +17,9 @@
 
 using Microsoft.WindowsAzure.MediaServices.Client;
 using System;
-using System.IO;
 using Two10.MediaServices;
 
-namespace PlayReady
+namespace DeleteAsset
 {
     class Program
     {
@@ -28,7 +27,7 @@ namespace PlayReady
         {
             if (args.Length != 1)
             {
-                Console.Error.WriteLine("PlayReady <asset-id> <contentKey> <customAttributes> <keyId> <keySeedValue> <licenseAcquisitionUrl>");
+                Console.Error.WriteLine("DeleteAsset <asset-id>");
                 return -1;
             }
 
@@ -39,36 +38,7 @@ namespace PlayReady
             string assetId = args[0];
             IAsset asset = cloudMediaContext.FindAssetById(assetId);
 
-            string contentKey = args[1];
-            string customAttributes = args[2];
-            string keyId = args[3];
-            string keySeedValue = args[4];
-            string licenseAcquisitionUrl = args[5];
-
-            IJob job = cloudMediaContext.Jobs.Create("PlayReady Protection Job");
-
-            IMediaProcessor processor = cloudMediaContext.GetMediaProcessor("PlayReady Protection Task");
-
-            string configuration = File.ReadAllText(Path.GetFullPath("PlayReady Protection.xml"));
-
-            
-            configuration = String.Format(configuration, contentKey, customAttributes, keyId, keySeedValue);
-
-            ITask task = job.Tasks.AddNew("My PlayReady Protection Task",
-                processor,
-                configuration,
-               Microsoft.WindowsAzure.MediaServices.Client.TaskCreationOptions.ProtectedConfiguration);
-
-            // Specify the input asset to be encoded.
-            task.InputMediaAssets.Add(asset);
-            // Add an output asset to contain the results of the job. Since the
-            // asset is already protected with PlayReady, we won't encrypt. 
-            task.OutputMediaAssets.AddNew("Output asset",
-                true,
-                AssetCreationOptions.None);
-
-            // Launch the job. 
-            job.Submit();
+            cloudMediaContext.Assets.Delete(asset);
 
             return 0;
         }

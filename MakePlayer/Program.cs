@@ -39,7 +39,7 @@ namespace MakePlayer
 
             string assetId = args[0];
 
-            IAsset asset = cloudMediaContext.GetAssetById(assetId);
+            IAsset asset = cloudMediaContext.FindAssetById(assetId);
 
             var manifest = from f in asset.Files
                            where f.Name.EndsWith(".ism")

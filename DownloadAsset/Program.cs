@@ -20,7 +20,7 @@ namespace DownloadAsset
             CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
 
             string assetId = args[0];
-            IAsset asset = cloudMediaContext.GetAssetById(assetId);
+            IAsset asset = cloudMediaContext.FindAssetById(assetId);
 
             string folder = assetId.ToString().Replace(":","");
 

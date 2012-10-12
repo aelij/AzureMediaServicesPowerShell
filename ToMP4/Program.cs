@@ -36,7 +36,7 @@ namespace ToMP4
             CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
 
             string assetId = args[0];
-            IAsset asset = cloudMediaContext.GetAssetById(assetId);
+            IAsset asset = cloudMediaContext.FindAssetById(assetId);
 
             IJob job = cloudMediaContext.Jobs.Create(string.Format("Convert {0} to MP4", asset.Name));
 

@@ -37,7 +37,7 @@ namespace Tasks
 
             string jobId = args[0];
 
-            IJob job = cloudMediaContext.GetJobById(jobId);
+            IJob job = cloudMediaContext.FindJobById(jobId);
 
             foreach (var task in job.Tasks)
             {

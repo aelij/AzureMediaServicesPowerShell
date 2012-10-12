@@ -37,7 +37,7 @@ namespace ErrorDetails
 
             string taskId = args[0];
 
-            ITask task = cloudMediaContext.GetTaskById(taskId);
+            ITask task = cloudMediaContext.FindTaskById(taskId);
 
             foreach (var errorDetail in task.ErrorDetails)
             {

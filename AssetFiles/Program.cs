@@ -37,7 +37,7 @@ namespace AssetFiles
             CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
 
             string assetId = args[0];
-            IAsset asset = cloudMediaContext.GetAssetById(assetId);
+            IAsset asset = cloudMediaContext.FindAssetById(assetId);
 
             foreach (var file in asset.Files)
             {
