@@ -18,26 +18,45 @@
 using Microsoft.WindowsAzure.MediaServices.Client;
 using System;
 
-namespace CreateAsset
+namespace CreateAccessPolicy
 {
     class Program
     {
         static int Main(string[] args)
         {
-            if (args.Length != 1)
+            if (args.Length != 3)
             {
-                Console.Error.WriteLine("CreateAsset <filename>");
+                Console.Error.WriteLine("CreateAccessPolicy <name> <timeSpan> <accessPermissions>");
                 return -1;
             }
-            
-            string filename = args[0];
+
+            string name = args[0];
+            TimeSpan timeSpan = TimeSpan.Parse(args[1]);
+            AccessPermissions accessPermissions = AccessPermissions.None;
+
+            switch (args[2].ToLower())
+            {
+                case "delete": accessPermissions = AccessPermissions.Delete;
+                    break;
+                case "list": accessPermissions = AccessPermissions.List;
+                    break;
+                case "none": accessPermissions = AccessPermissions.None;
+                    break;
+                case "read": accessPermissions = AccessPermissions.Read;
+                    break;
+                case "write": accessPermissions = AccessPermissions.Write;
+                    break;
+            }
 
             string accountName = Environment.GetEnvironmentVariable("ACCOUNT_NAME");
             string accountKey = Environment.GetEnvironmentVariable("ACCOUNT_KEY");
             CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
-            
-            IAsset asset = cloudMediaContext.Assets.Create(filename);
-            Console.WriteLine(asset.Id);
+
+            IAccessPolicy streamingPolicy = cloudMediaContext.AccessPolicies.Create(name,
+                timeSpan,
+                accessPermissions);
+
+            Console.WriteLine(streamingPolicy.Id);
 
             return 0;
         }

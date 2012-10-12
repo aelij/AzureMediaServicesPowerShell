@@ -17,7 +17,6 @@
 
 using Microsoft.WindowsAzure.MediaServices.Client;
 using System;
-using System.Linq;
 using Two10.MediaServices;
 
 namespace AssetFiles
@@ -43,7 +42,6 @@ namespace AssetFiles
             {
                 Console.WriteLine("{0}\t{1}\t{2}", file.Id, file.Name, file.IsEncrypted);
             }
-
 
             return 0;
         }

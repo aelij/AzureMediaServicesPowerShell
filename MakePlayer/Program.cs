@@ -25,6 +25,10 @@ namespace MakePlayer
 {
     class Program
     {
+        /// <summary>
+        /// Creates an Origin locator for a streaming asset and creates
+        /// an HTML file that wraps a Silverlight Player to play it.
+        /// </summary>
         static int Main(string[] args)
         {
             if (args.Length != 1)
@@ -57,14 +61,12 @@ namespace MakePlayer
 
             string urlForClientStreaming = originLocator.Path + manifestFile.Name + "/manifest";
 
-            
-
-            string buffer = File.ReadAllText("c:\\dropbox\\code\\MediaServicesCommandLineTools\\SmoothStreamingPlayer\\SmoothStreamingPlayer.html");
+            string buffer = File.ReadAllText("..\\SmoothStreamingPlayer\\SmoothStreamingPlayer.html");
 
             buffer = buffer.Replace("http://streams.smooth.vertigo.com/elephantsdream/Elephants_Dream_1024-h264-st-aac.ism/manifest",
                 urlForClientStreaming);
 
-            string filename = string.Format("c:\\dropbox\\code\\MediaServicesCommandLineTools\\SmoothStreamingPlayer\\{0}.html", asset.Id.Replace(":", ""));
+            string filename = string.Format("..\\SmoothStreamingPlayer\\{0}.html", asset.Id.Replace(":", ""));
 
             File.WriteAllText(filename, buffer);
 

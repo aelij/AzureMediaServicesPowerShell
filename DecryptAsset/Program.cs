@@ -42,13 +42,13 @@ namespace DecryptAsset
 
             IMediaProcessor decryptProcessor = cloudMediaContext.GetMediaProcessor("Storage Decryption");
 
-            ITask decryptTask = job.Tasks.AddNew("My decryption task",
+            ITask decryptTask = job.Tasks.AddNew(string.Format("Decrypt {0}", asset.Name),
                     decryptProcessor,string.Empty,
                     Microsoft.WindowsAzure.MediaServices.Client.TaskCreationOptions.None);
 
             decryptTask.InputMediaAssets.Add(asset);
- 
-            decryptTask.OutputMediaAssets.AddNew("My decrypted output asset",
+
+            decryptTask.OutputMediaAssets.AddNew(string.Format("{0} decrypted", asset.Name),
                 true,
                 AssetCreationOptions.None);
 
@@ -56,8 +56,7 @@ namespace DecryptAsset
 
             Console.WriteLine(job.Id);
 
-            return 0;
-            
+            return 0;       
         }
     }
 }

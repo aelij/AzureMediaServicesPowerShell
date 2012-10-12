@@ -28,9 +28,9 @@ namespace AccessPolicies
             string accountKey = Environment.GetEnvironmentVariable("ACCOUNT_KEY");
             CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
 
-            foreach (var policy in cloudMediaContext.AccessPolicies)
+            foreach (var accessPolicy in cloudMediaContext.AccessPolicies)
             {
-                Console.WriteLine("{0}\t{1}\t{2}\t{3}", policy.Id, policy.Name, policy.Created, policy.LastModified);
+                Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}", accessPolicy.Id, accessPolicy.Name, accessPolicy.Permissions.ToString(), accessPolicy.Duration, accessPolicy.LastModified);
             }
         }
     }
