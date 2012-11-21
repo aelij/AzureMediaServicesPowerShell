@@ -24,11 +24,9 @@ namespace Jobs
     {
         static void Main(string[] args)
         {
-            string accountName ="foobarbaz";
-            string accountKey ="Mh/LmW/YoKyyM/aC4dW+MdTcS563IM+5zRMfG1bjUYU=";
+            string accountName = Environment.GetEnvironmentVariable("ACCOUNT_NAME");
+            string accountKey = Environment.GetEnvironmentVariable("ACCOUNT_KEY");
 
-            //string accountName = Environment.GetEnvironmentVariable("ACCOUNT_NAME");
-            //string accountKey = Environment.GetEnvironmentVariable("ACCOUNT_KEY");
             CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
 
             foreach (var job in cloudMediaContext.Jobs)
