@@ -40,19 +40,18 @@ namespace StreamingUrl
 
             IAsset asset = cloudMediaContext.FindAssetById(assetId);
 
-            var manifest = from f in asset.Files
+            var manifest = from f in asset.AssetFiles
                                 where f.Name.EndsWith(".ism")
                                 select f;
 
-            IFileInfo manifestFile = manifest.First();
+            var manifestFile = manifest.First();
 
             IAccessPolicy streamingPolicy = cloudMediaContext.AccessPolicies.Create("Streaming policy",
                 TimeSpan.FromDays(1),
                 AccessPermissions.Read);
 
-            ILocator originLocator = cloudMediaContext.Locators.CreateOriginLocator(asset,
-                streamingPolicy,
-                DateTime.UtcNow.AddMinutes(-5));
+            ILocator originLocator = cloudMediaContext.Locators.CreateLocator(LocatorType.OnDemandOrigin, asset,
+                streamingPolicy);
 
             string streamingUrl = originLocator.Path + manifestFile.Name + "/manifest";
 

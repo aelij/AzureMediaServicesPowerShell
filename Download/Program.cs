@@ -44,7 +44,7 @@ namespace Download
 
             var theFile = file.FirstOrDefault();
 
-            theFile.DownloadToFile(theFile.Name);          
+            theFile.Download(theFile.Name);          
 
             return 0;
         }

@@ -27,16 +27,17 @@ namespace DownloadAsset
             Directory.CreateDirectory(folder);
 
 
-            foreach (var a in cloudMediaContext.AccessPolicies)
-            {
-                cloudMediaContext.AccessPolicies.Delete(a);
-            }
+            //foreach (var a in cloudMediaContext.AccessPolicies)
+            //{
+            //    a.Delete();
+
+            //}
 
          
 
-            foreach (var file in asset.Files)
+            foreach (var file in asset.AssetFiles)
             {
-                file.DownloadToFile(string.Format(@"{0}\{1}" ,folder ,file.Name));
+                file.Download(string.Format(@"{0}\{1}" ,folder ,file.Name));
             }
 
             return 0;

@@ -59,11 +59,13 @@ namespace MP4ToSmoothStream
             ITask task = job.Tasks.AddNew("MP4 to Smooth Stream Conversion",
                 processor,
                 configuration,
-                Microsoft.WindowsAzure.MediaServices.Client.TaskCreationOptions.ProtectedConfiguration);
+                Microsoft.WindowsAzure.MediaServices.Client.TaskOptions.ProtectedConfiguration);
 
-            task.InputMediaAssets.Add(asset);
 
-            task.OutputMediaAssets.AddNew(string.Format("Smooth Stream for {0}", asset.Name),
+            task.InputAssets.Add(asset);
+
+     
+            task.OutputAssets.AddNew(string.Format("Smooth Stream for {0}", asset.Name),
                 true,
                 AssetCreationOptions.None);
 

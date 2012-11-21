@@ -45,13 +45,13 @@ namespace ToMP4
             ITask task = job.Tasks.AddNew("MP4 Conversion",
                 processor,
                 "H.264 256k DSL CBR",
-                Microsoft.WindowsAzure.MediaServices.Client.TaskCreationOptions.None);
+                Microsoft.WindowsAzure.MediaServices.Client.TaskOptions.None);
 
-            task.InputMediaAssets.Add(asset);
+            task.InputAssets.Add(asset);
 
             // This name doesnt seem to get used .. bug?
 
-            task.OutputMediaAssets.AddNew(string.Format("MP4 for {0}", asset.Name),
+            task.OutputAssets.AddNew(string.Format("MP4 for {0}", asset.Name),
                 true,
                 AssetCreationOptions.None);
  

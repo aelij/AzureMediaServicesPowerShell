@@ -35,8 +35,8 @@ namespace CreateAsset
             string accountName = Environment.GetEnvironmentVariable("ACCOUNT_NAME");
             string accountKey = Environment.GetEnvironmentVariable("ACCOUNT_KEY");
             CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
-            
-            IAsset asset = cloudMediaContext.Assets.Create(filename);
+
+            IAsset asset = cloudMediaContext.Assets.Create(filename, AssetCreationOptions.None);
             Console.WriteLine(asset.Id);
 
             return 0;

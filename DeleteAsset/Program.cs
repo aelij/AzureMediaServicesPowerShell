@@ -38,7 +38,7 @@ namespace DeleteAsset
             string assetId = args[0];
             IAsset asset = cloudMediaContext.FindAssetById(assetId);
 
-            cloudMediaContext.Assets.Delete(asset);
+            asset.Delete();
 
             return 0;
         }

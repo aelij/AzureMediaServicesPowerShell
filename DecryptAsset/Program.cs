@@ -44,11 +44,11 @@ namespace DecryptAsset
 
             ITask decryptTask = job.Tasks.AddNew(string.Format("Decrypt {0}", asset.Name),
                     decryptProcessor,string.Empty,
-                    Microsoft.WindowsAzure.MediaServices.Client.TaskCreationOptions.None);
+                    Microsoft.WindowsAzure.MediaServices.Client.TaskOptions.None);
 
-            decryptTask.InputMediaAssets.Add(asset);
+            decryptTask.InputAssets.Add(asset);
 
-            decryptTask.OutputMediaAssets.AddNew(string.Format("{0} decrypted", asset.Name),
+            decryptTask.OutputAssets.AddNew(string.Format("{0} decrypted", asset.Name),
                 true,
                 AssetCreationOptions.None);
 

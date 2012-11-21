@@ -38,7 +38,7 @@ namespace AssetFiles
             string assetId = args[0];
             IAsset asset = cloudMediaContext.FindAssetById(assetId);
 
-            foreach (var file in asset.Files)
+            foreach (var file in asset.AssetFiles)
             {
                 Console.WriteLine("{0}\t{1}\t{2}", file.Id, file.Name, file.IsEncrypted);
             }

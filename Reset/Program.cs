@@ -38,7 +38,7 @@ namespace Reset
                         asset.ContentKeys.Remove(key);
                     }
 
-                    cloudMediaContext.Assets.Update(asset);
+                    asset.Update();
 
                 }
                 catch (Exception e)
@@ -52,7 +52,7 @@ namespace Reset
             {
                 try
                 {
-                    cloudMediaContext.Assets.Delete(asset);
+                    asset.Delete();
                 }
                 catch (Exception e)
                 {
@@ -83,7 +83,7 @@ namespace Reset
             {
                 try
                 {
-                    cloudMediaContext.AccessPolicies.Delete(accessPolicy);
+                    accessPolicy.Delete();
                 }
                 catch (Exception e)
                 {
@@ -98,7 +98,8 @@ namespace Reset
             {
                 try
                 {
-                    cloudMediaContext.Locators.Revoke(locator);
+                    
+                    //cloudMediaContext.Locators.Revoke(locator);
                 }
                 catch (Exception e)
                 {

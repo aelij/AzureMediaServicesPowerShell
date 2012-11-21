@@ -38,7 +38,7 @@ namespace DeleteAccessPolicy
             string acessPolicyId = args[0];
             IAccessPolicy accessPolicy = cloudMediaContext.FindAcessPolicyById(acessPolicyId);
 
-            cloudMediaContext.AccessPolicies.Delete(accessPolicy);
+            accessPolicy.Delete();
 
             return 0;
 
