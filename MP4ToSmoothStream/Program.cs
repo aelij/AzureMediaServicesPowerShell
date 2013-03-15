@@ -66,7 +66,6 @@ namespace MP4ToSmoothStream
 
      
             task.OutputAssets.AddNew(string.Format("Smooth Stream for {0}", asset.Name),
-                true,
                 AssetCreationOptions.None);
 
             job.Submit();

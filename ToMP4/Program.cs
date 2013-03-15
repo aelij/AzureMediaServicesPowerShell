@@ -49,10 +49,7 @@ namespace ToMP4
 
             task.InputAssets.Add(asset);
 
-            // This name doesnt seem to get used .. bug?
-
             task.OutputAssets.AddNew(string.Format("MP4 for {0}", asset.Name),
-                true,
                 AssetCreationOptions.None);
  
             job.Submit();

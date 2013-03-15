@@ -49,7 +49,6 @@ namespace DecryptAsset
             decryptTask.InputAssets.Add(asset);
 
             decryptTask.OutputAssets.AddNew(string.Format("{0} decrypted", asset.Name),
-                true,
                 AssetCreationOptions.None);
 
             job.Submit();

@@ -63,7 +63,6 @@ namespace PlayReady
             // Add an output asset to contain the results of the job. Since the
             // asset is already protected with PlayReady, we won't encrypt. 
             task.OutputAssets.AddNew("Output asset",
-                true,
                 AssetCreationOptions.None);
 
             // Launch the job. 
