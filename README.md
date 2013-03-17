@@ -3,8 +3,8 @@ MediaServicesCommandLineTools
 
 Tools and sample code for Windows Azure Media Services.
 
-This is experimental code that exercises the features of the Windows
-Azure Media Services Preview release.
+This is experimental code that exercises the features of Windows
+Azure Media Services.
 
 Not for production use. Some bits still problematic. Use with care!
 
@@ -13,8 +13,7 @@ Comments, feedback and patches welcome!
 Getting Started
 ---------------
 
-Build the solutions (currently V2012 but should be easily converted
-back to to VS2010).
+Build the solutions.
 
 edit the ..\etc\setup.bat to include you account details.
 
