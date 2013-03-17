@@ -198,52 +198,23 @@ namespace Two10.MediaServices
             }
         }
 
-        public static IJob CreateThumbnail(this CloudMediaContext cloudMediaContext, IAsset asset)
-        {
-           
-            IJob job = cloudMediaContext.Jobs.Create("My Thumbnail job");
+        public static IJob CreateThumbnails(this CloudMediaContext cloudMediaContext, IAsset asset)
+        {     
+            IJob job = cloudMediaContext.Jobs.Create(string.Format("Thumbnails for {0}", asset.Name));
 
             IMediaProcessor processor = cloudMediaContext.GetMediaProcessor("Windows Azure Media Encoder");
 
-            ITask task = job.Tasks.AddNew("My thumbnail task",
+            ITask task = job.Tasks.AddNew(string.Format("Thumbnails for {0}", asset.Name),
                 processor,
                 "Thumbnails",TaskOptions.ProtectedConfiguration);
 
-            // Specify the input asset to be encoded.
             task.InputAssets.Add(asset);
-            // Add an output asset to contain the results of the job.
+
             task.OutputAssets.AddNew("Output asset",
                 AssetCreationOptions.None);
 
-            //// Use the following event handler to check job progress.  
-            //job.StateChanged += new
-            //        EventHandler<JobStateChangedEventArgs>(StateChanged);
-
-            // Launch the job.
             job.Submit();
 
-            // Optionally log job details. This displays basic job details
-            // to the console and saves them to a JobDetails-{JobId}.txt file 
-            // in your output folder.
-            //LogJobDetails(job.Id);
-
-            // Check job execution and wait for job to finish. 
-            //Task progressJobTask = job.GetExecutionProgressTask(CancellationToken.None);
-            //progressJobTask.Wait();
-
-            // Get an updated job reference after waiting for a job on 
-            // a thread.
-            //job = GetJob(job.Id);
-
-            // If job state is Error, the event handling 
-            // method for job progress should log errors.  Here we check 
-            // for error state and exit if needed.
-            //if (job.State == JobState.Error)
-            //{
-            //    Console.WriteLine("\nExiting method due to job error.");
-            //    return task;
-            //}
-            //return task;
             return job;
         }
     }

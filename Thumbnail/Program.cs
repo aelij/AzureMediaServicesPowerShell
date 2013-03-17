@@ -38,7 +38,7 @@ namespace Thumbnail
             string assetId = args[0];
             IAsset asset = cloudMediaContext.FindAssetById(assetId);
 
-            IJob job = cloudMediaContext.CreateThumbnail(asset);
+            IJob job = cloudMediaContext.CreateThumbnails(asset);
 
             Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}", job.Id, job.Name, job.State, job.RunningDuration, job.LastModified);
 

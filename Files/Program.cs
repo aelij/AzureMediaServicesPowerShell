@@ -17,35 +17,22 @@
 
 using Microsoft.WindowsAzure.MediaServices.Client;
 using System;
-using System.IO;
-using Two10.MediaServices;
 
-namespace DownloadAsset
+namespace Files
 {
     class Program
     {
         static int Main(string[] args)
         {
-            if (args.Length != 1)
-            {
-                Console.Error.WriteLine("DownloadAsset <asset-id> - downloads all asset files.");
-                return -1;
-            }
-
             string accountName = Environment.GetEnvironmentVariable("ACCOUNT_NAME");
             string accountKey = Environment.GetEnvironmentVariable("ACCOUNT_KEY");
+
             CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
 
-            string assetId = args[0];
-            IAsset asset = cloudMediaContext.FindAssetById(assetId);
-
-            string folder = asset.Id.ToString().Replace(":", "");
-
-            Directory.CreateDirectory(folder);
-
-            foreach (var file in asset.AssetFiles)
+            foreach (var file in cloudMediaContext.Files)
             {
-                file.Download(string.Format(@"{0}\{1}" ,folder ,file.Name));
+                Console.WriteLine("{0}\t{1}\t{2}\t{3}", file.Id,file.Name, file.IsEncrypted,file.LastModified);
+            
             }
 
             return 0;
