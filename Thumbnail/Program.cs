@@ -17,10 +17,9 @@
 
 using Microsoft.WindowsAzure.MediaServices.Client;
 using System;
-using System.Linq;
 using Two10.MediaServices;
 
-namespace Download
+namespace Thumbnail
 {
     class Program
     {
@@ -28,19 +27,20 @@ namespace Download
         {
             if (args.Length != 1)
             {
-                Console.Error.WriteLine("Download <asset-file-id> - downloads a file.");
+                Console.Error.WriteLine("Thumbnail <asset-id>");
                 return -1;
             }
 
             string accountName = Environment.GetEnvironmentVariable("ACCOUNT_NAME");
             string accountKey = Environment.GetEnvironmentVariable("ACCOUNT_KEY");
             CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
-   
-            string fileId = args[0];
 
-            IAssetFile assetFile = cloudMediaContext.FindFileById(fileId);
+            string assetId = args[0];
+            IAsset asset = cloudMediaContext.FindAssetById(assetId);
 
-            assetFile.Download(assetFile.Name);          
+            IJob job = cloudMediaContext.CreateThumbnail(asset);
+
+            Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}", job.Id, job.Name, job.State, job.RunningDuration, job.LastModified);
 
             return 0;
         }
