@@ -54,11 +54,11 @@ namespace MP4ToSmoothStream
 
             IJob job = cloudMediaContext.Jobs.Create(string.Format("Convert {0} to Smooth Stream", asset.Name));
 
-            IMediaProcessor processor = cloudMediaContext.GetMediaProcessor("MP4 to Smooth Streams Task");
+            IMediaProcessor processor = cloudMediaContext.GetMediaProcessor("Windows Azure Media Encoder");
 
             ITask task = job.Tasks.AddNew("MP4 to Smooth Stream Conversion",
                 processor,
-                configuration,
+                "H264 Smooth Streaming 720p",
                 Microsoft.WindowsAzure.MediaServices.Client.TaskOptions.ProtectedConfiguration);
 
 
