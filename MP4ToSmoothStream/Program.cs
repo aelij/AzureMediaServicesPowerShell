@@ -24,7 +24,7 @@ namespace MP4ToSmoothStream
     class Program
     {
 
-      // Throws an error within the new SDK as a configuration. Suitable task preset used instead.
+      // Throws an error within the new SDK as a configuration. Suitable task preset used instead. There are now also fewer encoder options
 
         const string configuration = 
 @"<taskDefinition xmlns=""http://schemas.microsoft.com/iis/media/v4/TM/TaskDefinition#""> 
@@ -57,6 +57,7 @@ namespace MP4ToSmoothStream
 
             IJob job = cloudMediaContext.Jobs.Create(string.Format("Convert {0} to Smooth Stream", asset.Name));
 
+            // Windows Azure Encoder used, not a dedicated Smooth Stream encoder as before
             IMediaProcessor processor = cloudMediaContext.GetMediaProcessor("Windows Azure Media Encoder");
 
             ITask task = job.Tasks.AddNew("MP4 to Smooth Stream Conversion",
