@@ -43,11 +43,15 @@ Test PlayReady
 
 HLS Streaming
 
-Thumbnailing
-
 More example format conversions
 
 
 Rob Blackwell
 
 October 2012
+
+Update
+---------------
+
+Changes made to reflect the new SDK
+CreateAsset is now Upload Asset. Some formats are now more tightly constrained with Azure Media Services, so task preset strings have been utilised.
