@@ -23,6 +23,9 @@ namespace MP4ToSmoothStream
 {
     class Program
     {
+
+      // Throws an error within the new SDK as a configuration. Suitable task preset used instead.
+
         const string configuration = 
 @"<taskDefinition xmlns=""http://schemas.microsoft.com/iis/media/v4/TM/TaskDefinition#""> 
   <name>MP4 to Smooth Streams</name>
@@ -58,7 +61,7 @@ namespace MP4ToSmoothStream
 
             ITask task = job.Tasks.AddNew("MP4 to Smooth Stream Conversion",
                 processor,
-                "H264 Smooth Streaming 720p",
+                "H264 Smooth Streaming 720p", // Task Preset. Amend as required.
                 Microsoft.WindowsAzure.MediaServices.Client.TaskOptions.ProtectedConfiguration);
 
 
