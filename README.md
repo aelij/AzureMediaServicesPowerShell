@@ -29,7 +29,7 @@ Run a command
     DownloadAsset <assetId> - downloads all the files for an asset
     ToMP4 <assetId> - creates a job to convert the given asset to MP4
     ContentKeys - list content keys
-    CreateAsset <filename> - upload and create a new asset from local file
+    UploadAsset <filename> - upload and create a new asset from local file
     TaskPresets - list the task presets
     ErrorDetails <taskId> - Show error details of a failed task
     StreamingUrl <assetId> - Create an Origin Locator for a SmoothStream asset

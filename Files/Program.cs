@@ -31,8 +31,7 @@ namespace Files
 
             foreach (var file in cloudMediaContext.Files)
             {
-                Console.WriteLine("{0}\t{1}\t{2}\t{3}", file.Id,file.Name, file.IsEncrypted,file.LastModified);
-            
+                Console.WriteLine("{0}\t{1}\t{2}\t{3}", file.Id,file.Name, file.IsEncrypted,file.LastModified);           
             }
 
             return 0;

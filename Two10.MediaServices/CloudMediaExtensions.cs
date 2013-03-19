@@ -27,10 +27,8 @@ namespace Two10.MediaServices
 {
     public static class CloudMediaContextExtensions
     {
-
         public static IAsset FindAssetById(this CloudMediaContext cloudMediaContext, string assetId)
         {
-
             foreach (var asset in cloudMediaContext.Assets)
             {
                 if (asset.Id.EndsWith(assetId))

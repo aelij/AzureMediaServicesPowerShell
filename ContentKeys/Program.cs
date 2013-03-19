@@ -30,7 +30,7 @@ namespace ContentKeys
 
             foreach (var contentKey in cloudMediaContext.ContentKeys)
             {
-                Console.WriteLine("{0}\t{1}\t{2}", contentKey.Id, contentKey.Name,contentKey.Checksum);
+                Console.WriteLine("{0}\t{1}\t{2}", contentKey.Id, contentKey.Name, contentKey.Checksum);
             }
         }
     }
