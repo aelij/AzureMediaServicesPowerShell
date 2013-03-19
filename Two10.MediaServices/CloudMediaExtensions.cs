@@ -217,5 +217,69 @@ namespace Two10.MediaServices
 
             return job;
         }
+
+        public static ILocator GetStreamingOriginLocator(this CloudMediaContext cloudMediaContext, IAsset assetToStream)
+        {
+            
+
+            // Get a reference to the streaming manifest file from the  
+            // collection of files in the asset. 
+            var theManifest =
+                                from f in assetToStream.AssetFiles
+                                where f.Name.EndsWith(".ism")
+                                select f;
+            // Cast the reference to a true IAssetFile type. 
+            IAssetFile manifestFile = theManifest.First();
+            IAccessPolicy policy = null;
+            ILocator originLocator = null;
+
+            // Create a 30-day readonly access policy. 
+            policy = cloudMediaContext.AccessPolicies.Create("Streaming policy",
+                TimeSpan.FromDays(30),
+                AccessPermissions.Read);
+
+            // Create a locator to the streaming content on an origin. 
+            originLocator = cloudMediaContext.Locators.CreateLocator(LocatorType.OnDemandOrigin, assetToStream,
+                policy,
+                DateTime.UtcNow.AddMinutes(-5));
+
+            // Display some useful values based on the locator.
+            // Display the base path to the streaming asset on the origin server.
+            Console.WriteLine("Streaming asset base path on origin: ");
+            Console.WriteLine(originLocator.Path);
+            Console.WriteLine();
+            // Create a full URL to the manifest file. Use this for playback
+            // in streaming media clients. 
+            string urlForClientStreaming = originLocator.Path + manifestFile.Name + "/manifest";
+            Console.WriteLine("URL to manifest for client streaming: ");
+            Console.WriteLine(urlForClientStreaming);
+            Console.WriteLine();
+            // Display the ID of the origin locator, the access policy, and the asset.
+            Console.WriteLine("Origin locator Id: " + originLocator.Id);
+            Console.WriteLine("Access policy Id: " + policy.Id);
+            Console.WriteLine("Streaming asset Id: " + assetToStream.Id);
+
+            // Return the locator. 
+            return originLocator;
+        }
+
+        public static IMediaProcessor GetLatestMediaProcessorByName(this CloudMediaContext cloudMediaContext, string mediaProcessorName)
+        {
+            // The possible strings that can be passed into the
+            // method for the mediaProcessor parameter:
+            //   Windows Azure Media Encoder
+            //   Windows Azure Media Packager
+            //   Windows Azure Media Encryptor
+            //   Storage Decryption
+
+            var processor = cloudMediaContext.MediaProcessors.Where(p => p.Name == mediaProcessorName).
+                ToList().OrderBy(p => new Version(p.Version)).LastOrDefault();
+
+            if (processor == null)
+                throw new ArgumentException(string.Format("Unknown media processor", mediaProcessorName));
+
+            return processor;
+        }
+
     }
 }
