@@ -44,7 +44,8 @@ namespace ToMP4
 
             ITask task = job.Tasks.AddNew("MP4 Conversion",
                 processor,
-                "H.264 256k DSL CBR",
+                //"H.264 256k DSL CBR",
+                "H264 Adaptive Bitrate MP4 Set 720p",
                 Microsoft.WindowsAzure.MediaServices.Client.TaskOptions.None);
 
             task.InputAssets.Add(asset);
