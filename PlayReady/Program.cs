@@ -59,7 +59,7 @@ namespace PlayReady
                Microsoft.WindowsAzure.MediaServices.Client.TaskOptions.ProtectedConfiguration);
 
             // Specify the input asset to be encoded.
-            task.InputAssets.Add(asset);
+            task.InputAssets.Add(asset);    
             // Add an output asset to contain the results of the job. Since the
             // asset is already protected with PlayReady, we won't encrypt. 
             task.OutputAssets.AddNew("Output asset",

@@ -67,6 +67,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MakeSasLocator", "MakeSasLo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MP4ToHLS", "MP4ToHLS\MP4ToHLS.csproj", "{FC6C6BDE-2F31-4AF0-B123-47009F7BBEB3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddFile", "AddFile\AddFile.csproj", "{B4EF4F40-C169-4CDF-B8D1-4E9BA9EF8DF3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RunTask", "RunTask\RunTask.csproj", "{D0FEABB7-AE45-412A-9318-8B2145783DF8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -193,6 +197,14 @@ Global
 		{FC6C6BDE-2F31-4AF0-B123-47009F7BBEB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC6C6BDE-2F31-4AF0-B123-47009F7BBEB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC6C6BDE-2F31-4AF0-B123-47009F7BBEB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4EF4F40-C169-4CDF-B8D1-4E9BA9EF8DF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4EF4F40-C169-4CDF-B8D1-4E9BA9EF8DF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4EF4F40-C169-4CDF-B8D1-4E9BA9EF8DF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4EF4F40-C169-4CDF-B8D1-4E9BA9EF8DF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0FEABB7-AE45-412A-9318-8B2145783DF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0FEABB7-AE45-412A-9318-8B2145783DF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0FEABB7-AE45-412A-9318-8B2145783DF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0FEABB7-AE45-412A-9318-8B2145783DF8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
