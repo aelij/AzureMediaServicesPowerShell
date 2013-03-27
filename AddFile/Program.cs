@@ -27,7 +27,9 @@ namespace AddFile
 
             string fileName = args[1];
 
-            var assetFile = asset.AssetFiles.Create(fileName);
+            // create the AssetFile with the name as the file being uploaded.
+            // This is required by the service
+            var assetFile = asset.AssetFiles.Create(System.IO.Path.GetFileName(fileName));
 
             assetFile.Upload(fileName);
 

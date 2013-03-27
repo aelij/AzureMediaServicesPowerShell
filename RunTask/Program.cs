@@ -13,9 +13,9 @@ namespace RunTask
     {
         static int Main(string[] args)
         {
-            if (args.Length != 2)
+            if (args.Length != 3)
             {
-                Console.Error.WriteLine("RunTask <AssetId> <task-preset-file>");
+                Console.Error.WriteLine("RunTask <AssetId> <Azure Media Processor> <task-preset-file>");
                 return -1;
             }
 
@@ -26,12 +26,30 @@ namespace RunTask
             string assetId = args[0];
             IAsset asset = cloudMediaContext.FindAssetById(assetId);
 
-            string filename = args[1];
+            string mediaProcessor = args[1];
+            IMediaProcessor processor = null;
+            try
+            {
+                processor = cloudMediaContext.GetMediaProcessor(mediaProcessor);
+            }
 
+            catch (Exception)
+            {
+                Console.WriteLine("Invalid media processor name!");
+                Console.WriteLine("List of available processors:");
+                var procs = cloudMediaContext.MediaProcessors.ToList();
+                foreach (var proc in procs)
+                {
+                    Console.WriteLine("{0} \n   with id: {1}", proc.Name, proc.Id);
+                    Console.WriteLine();
+                }
+                return -1;
+            }
+
+            string filename = args[2];
             IJob job = cloudMediaContext.Jobs.Create("Run Task");
 
-            IMediaProcessor processor = cloudMediaContext.GetMediaProcessor("Windows Azure Media Encoder");
-
+            
 
             string configuration = File.ReadAllText(Path.GetFullPath(filename));
 
