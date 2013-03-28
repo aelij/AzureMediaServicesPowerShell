@@ -13,9 +13,9 @@ namespace RunTask
     {
         static int Main(string[] args)
         {
-            if (args.Length != 3)
+            if (args.Length != 2)
             {
-                Console.Error.WriteLine("RunTask <AssetId> <Azure Media Processor> <task-preset-file>");
+                Console.Error.WriteLine("RunTask <AssetId> <task-preset-file>");
                 return -1;
             }
 
@@ -26,27 +26,44 @@ namespace RunTask
             string assetId = args[0];
             IAsset asset = cloudMediaContext.FindAssetById(assetId);
 
-            string mediaProcessor = args[1];
             IMediaProcessor processor = null;
-            try
-            {
-                processor = cloudMediaContext.GetMediaProcessor(mediaProcessor);
-            }
 
-            catch (Exception)
-            {
-                Console.WriteLine("Invalid media processor name!");
-                Console.WriteLine("List of available processors:");
-                var procs = cloudMediaContext.MediaProcessors.ToList();
-                foreach (var proc in procs)
+                Console.WriteLine("Choose Media processor: ");
+                try
                 {
-                    Console.WriteLine("{0} \n   with id: {1}", proc.Name, proc.Id);
+                    Dictionary<int, IMediaProcessor> processors = new Dictionary<int, IMediaProcessor>();
+                    var procs = cloudMediaContext.MediaProcessors.ToList();
+                    int i = 1;
+                    foreach (var proc in procs)
+                    {
+                        Console.WriteLine("{0}. {1} \n      with id: {1}", i, proc.Name, proc.Id);
+                        Console.WriteLine();
+                        processors.Add(i, proc);
+                        i++;
+                    }
+                    Console.Write("Enter [1..n]:");
+                    var key = Console.ReadKey();
                     Console.WriteLine();
-                }
-                return -1;
-            }
+                    if (char.IsDigit(key.KeyChar))
+                    {
+                        int result = key.KeyChar - '0';
+                        processor = processors[result];
+                    }
 
-            string filename = args[2];
+                }
+                catch
+                {
+                    Console.WriteLine("Could not get processor(s)!");
+                    return -1;
+                }
+
+                if (processor == null)
+                {
+                    Console.WriteLine("Invalid choice");
+                    return -1;
+                }
+
+            string filename = args[1];
             IJob job = cloudMediaContext.Jobs.Create("Run Task");
 
             
