@@ -1,79 +1,72 @@
-﻿using Microsoft.WindowsAzure.MediaServices.Client;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Two10.MediaServices;
+using System.Management.Automation;
+using WindowsAzure.Commands.MediaServices.Utilities;
+using Microsoft.WindowsAzure.MediaServices.Client;
 
-namespace RunTask
+namespace WindowsAzure.Commands.MediaServices
 {
-    class StartTaskCommand
+    public class StartTaskCommand : CmdletWithCloudMediaContext
     {
-        static int Main(string[] args)
+        [Parameter(Mandatory = true)]
+        [ValidateNotNullOrEmpty]
+        public string AssetId { get; set; }
+
+        [Parameter(Mandatory = true)]
+        [ValidateNotNullOrEmpty]
+        public FileInfo PresetFile { get; set; }
+
+        public override void ExecuteCmdlet()
         {
-            if (args.Length != 2)
-            {
-                Console.Error.WriteLine("RunTask <AssetId> <task-preset-file>");
-                return -1;
-            }
-
-            string accountName = Environment.GetEnvironmentVariable("ACCOUNT_NAME");
-            string accountKey = Environment.GetEnvironmentVariable("ACCOUNT_KEY");
-            CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
-
-            string assetId = args[0];
-            IAsset asset = cloudMediaContext.FindAssetById(assetId);
+            IAsset asset = CloudMediaContext.FindAssetById(AssetId);
 
             IMediaProcessor processor = null;
 
-                Console.WriteLine("Choose Media processor: ");
-                try
+            Console.WriteLine("Choose Media processor: ");
+            try
+            {
+                var processors = new Dictionary<int, IMediaProcessor>();
+                var procs = CloudMediaContext.MediaProcessors.ToList();
+                int i = 1;
+                foreach (var proc in procs)
                 {
-                    Dictionary<int, IMediaProcessor> processors = new Dictionary<int, IMediaProcessor>();
-                    var procs = cloudMediaContext.MediaProcessors.ToList();
-                    int i = 1;
-                    foreach (var proc in procs)
-                    {
-                        Console.WriteLine("{0}. {1} \n      with id: {1}", i, proc.Name, proc.Id);
-                        Console.WriteLine();
-                        processors.Add(i, proc);
-                        i++;
-                    }
-                    Console.Write("Enter [1..n]:");
-                    var key = Console.ReadKey();
+                    Console.WriteLine("{0}. {1} \n      with id: {2}", i, proc.Name, proc.Id);
                     Console.WriteLine();
-                    if (char.IsDigit(key.KeyChar))
-                    {
-                        int result = key.KeyChar - '0';
-                        processor = processors[result];
-                    }
-
+                    processors.Add(i, proc);
+                    i++;
                 }
-                catch
+                Console.Write("Enter [1..n]:");
+                var key = Console.ReadKey();
+                Console.WriteLine();
+                if (char.IsDigit(key.KeyChar))
                 {
-                    Console.WriteLine("Could not get processor(s)!");
-                    return -1;
+                    int result = key.KeyChar - '0';
+                    processor = processors[result];
                 }
 
-                if (processor == null)
-                {
-                    Console.WriteLine("Invalid choice");
-                    return -1;
-                }
+            }
+            catch
+            {
+                throw new CmdletInvocationException("Could not get processor(s)!");
+            }
 
-            string filename = args[1];
-            IJob job = cloudMediaContext.Jobs.Create("Run Task");
+            if (processor == null)
+            {
+                throw new CmdletInvocationException("Invalid choice");
+            }
 
-            
+            IJob job = CloudMediaContext.Jobs.Create("Run Task");
 
-            string configuration = File.ReadAllText(Path.GetFullPath(filename));
+
+
+            string configuration = File.ReadAllText(PresetFile.FullName);
 
             ITask task = job.Tasks.AddNew("My Task",
                 processor,
                 configuration,
-               Microsoft.WindowsAzure.MediaServices.Client.TaskOptions.None);
+               TaskOptions.None);
 
             // Specify the input asset to be encoded.
             task.InputAssets.Add(asset);
@@ -82,14 +75,10 @@ namespace RunTask
             task.OutputAssets.AddNew("Output asset",
                 AssetCreationOptions.None);
 
-
             // Launch the job. 
             job.Submit();
 
-            Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}", job.Id, job.Name, job.State, job.RunningDuration, job.LastModified);
-
-
-            return 0;
+            WriteObject(job);
         }
     }
 }

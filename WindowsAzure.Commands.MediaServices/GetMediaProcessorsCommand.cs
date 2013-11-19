@@ -15,24 +15,18 @@
 //
 #endregion
 
-using Microsoft.WindowsAzure.MediaServices.Client;
-using System;
+using WindowsAzure.Commands.MediaServices.Utilities;
 
-namespace MediaProcessors
+namespace WindowsAzure.Commands.MediaServices
 {
-    class GetMediaProcessorsCommand
+    public class GetMediaProcessorsCommand : CmdletWithCloudMediaContext
     {
-        static void Main(string[] args)
+        public override void ExecuteCmdlet()
         {
-            string accountName = Environment.GetEnvironmentVariable("ACCOUNT_NAME");
-            string accountKey = Environment.GetEnvironmentVariable("ACCOUNT_KEY");
-            CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
-
-            foreach (var processor in cloudMediaContext.MediaProcessors)
+            foreach (var processor in CloudMediaContext.MediaProcessors)
             {
-                Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}", processor.Id, processor.Name, processor.Sku,processor.Vendor, processor.Version);
+                WriteObject(processor);
             }
-
         }
     }
 }

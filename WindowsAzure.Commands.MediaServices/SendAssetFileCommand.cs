@@ -15,33 +15,24 @@
 //
 #endregion
 
+using System.IO;
+using System.Management.Automation;
+using WindowsAzure.Commands.MediaServices.Utilities;
 using Microsoft.WindowsAzure.MediaServices.Client;
-using System;
-using Two10.MediaServices;
 
-namespace UploadAsset
+namespace WindowsAzure.Commands.MediaServices
 {
-    class SendAssetFileCommand
+    public class SendAssetFileCommand : CmdletWithCloudMediaContext
     {
-        static int Main(string[] args)
+        [Parameter(Mandatory = true)]
+        [ValidateNotNullOrEmpty]
+        public FileInfo LocalFilePath { get; set; }
+
+        public override void ExecuteCmdlet()
         {
-            if (args.Length != 1)
-            {
-                Console.Error.WriteLine("UploadAsset <filename>");
-                return -1;
-            }
-            
-            string filename = args[0];
+            IAsset asset = CloudMediaContext.CreateAssetAndUploadSingleFile(AssetCreationOptions.None, LocalFilePath.FullName);
 
-            string accountName = Environment.GetEnvironmentVariable("ACCOUNT_NAME");
-            string accountKey = Environment.GetEnvironmentVariable("ACCOUNT_KEY");
-            CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
-
-            IAsset asset = cloudMediaContext.CreateAssetAndUploadSingleFile(AssetCreationOptions.None, filename);
-
-            Console.WriteLine("{0}\t{1}\t{2}\t{3}", asset.Id, asset.Name, asset.State, asset.LastModified);
-
-            return 0;
+            WriteObject(asset);
         }
     }
 }

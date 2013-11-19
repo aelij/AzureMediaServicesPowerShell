@@ -15,34 +15,25 @@
 //
 #endregion
 
+using System.Management.Automation;
+using WindowsAzure.Commands.MediaServices.Utilities;
 using Microsoft.WindowsAzure.MediaServices.Client;
-using System;
-using System.Linq;
-using Two10.MediaServices;
 
-namespace Download
+namespace WindowsAzure.Commands.MediaServices
 {
-    class ReceiveAssetFileCommand
+    public class ReceiveAssetFileCommand : CmdletWithCloudMediaContext
     {
-        static int Main(string[] args)
+        [Parameter(Mandatory = true)]
+        [ValidateNotNullOrEmpty]
+        public string FileId { get; set; }
+
+        public override void ExecuteCmdlet()
         {
-            if (args.Length != 1)
-            {
-                Console.Error.WriteLine("Download <asset-file-id> - downloads a file.");
-                return -1;
-            }
+            IAssetFile assetFile = CloudMediaContext.FindFileById(FileId);
 
-            string accountName = Environment.GetEnvironmentVariable("ACCOUNT_NAME");
-            string accountKey = Environment.GetEnvironmentVariable("ACCOUNT_KEY");
-            CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
-   
-            string fileId = args[0];
+            assetFile.Download(assetFile.Name);
 
-            IAssetFile assetFile = cloudMediaContext.FindFileById(fileId);
-
-            assetFile.Download(assetFile.Name);          
-
-            return 0;
+            WriteVerbose(string.Format("Downloaded {0}", assetFile.Name));
         }
     }
 }

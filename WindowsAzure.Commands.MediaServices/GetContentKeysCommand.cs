@@ -15,22 +15,17 @@
 //
 #endregion
 
-using Microsoft.WindowsAzure.MediaServices.Client;
-using System;
+using WindowsAzure.Commands.MediaServices.Utilities;
 
-namespace ContentKeys
+namespace WindowsAzure.Commands.MediaServices
 {
-    class GetContentKeysCommand
+    public class GetContentKeysCommand : CmdletWithCloudMediaContext
     {
-        static void Main(string[] args)
+        public override void ExecuteCmdlet()
         {
-            string accountName = Environment.GetEnvironmentVariable("ACCOUNT_NAME");
-            string accountKey = Environment.GetEnvironmentVariable("ACCOUNT_KEY");
-            CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
-
-            foreach (var contentKey in cloudMediaContext.ContentKeys)
+            foreach (var contentKey in CloudMediaContext.ContentKeys)
             {
-                Console.WriteLine("{0}\t{1}\t{2}", contentKey.Id, contentKey.Name, contentKey.Checksum);
+                WriteObject(contentKey);
             }
         }
     }

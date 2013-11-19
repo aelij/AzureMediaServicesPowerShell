@@ -15,38 +15,31 @@
 //
 #endregion
 
+using System.Management.Automation;
+using WindowsAzure.Commands.MediaServices.Utilities;
 using Microsoft.WindowsAzure.MediaServices.Client;
-using System;
-using Two10.MediaServices;
 
-namespace ToMP4
+namespace WindowsAzure.Commands.MediaServices
 {
-    class ConvertToMp4Command
+    public class ConvertToMp4Command : CmdletWithCloudMediaContext
     {
-        static int Main(string[] args)
+        [Parameter(Mandatory = true)]
+        [ValidateNotNullOrEmpty]
+        public string AssetId { get; set; }
+
+        public override void ExecuteCmdlet()
         {
-            if (args.Length != 1)
-            {
-                Console.Error.WriteLine("ToMP4 <asset-id>");
-                return -1;
-            }
+            IAsset asset = CloudMediaContext.FindAssetById(AssetId);
 
-            string accountName = Environment.GetEnvironmentVariable("ACCOUNT_NAME");
-            string accountKey = Environment.GetEnvironmentVariable("ACCOUNT_KEY");
-            CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
+            IJob job = CloudMediaContext.Jobs.Create(string.Format("Convert {0} to MP4", asset.Name));
 
-            string assetId = args[0];
-            IAsset asset = cloudMediaContext.FindAssetById(assetId);
-
-            IJob job = cloudMediaContext.Jobs.Create(string.Format("Convert {0} to MP4", asset.Name));
-
-            IMediaProcessor processor = cloudMediaContext.GetMediaProcessor("Windows Azure Media Encoder");
+            IMediaProcessor processor = CloudMediaContext.GetMediaProcessor("Windows Azure Media Encoder");
 
             ITask task = job.Tasks.AddNew("MP4 Conversion",
                 processor,
                 //"H.264 256k DSL CBR",
                 "H264 Adaptive Bitrate MP4 Set 720p",
-                Microsoft.WindowsAzure.MediaServices.Client.TaskOptions.None);
+                TaskOptions.None);
 
             task.InputAssets.Add(asset);
 
@@ -55,10 +48,7 @@ namespace ToMP4
  
             job.Submit();
 
-            Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}", job.Id, job.Name, job.State, job.RunningDuration, job.LastModified);
-
-            return 0;
-
+            WriteObject(job);
         }
     }
 }

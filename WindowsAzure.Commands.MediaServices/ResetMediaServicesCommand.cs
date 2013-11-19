@@ -15,21 +15,29 @@
 //
 #endregion
 
-using Microsoft.WindowsAzure.MediaServices.Client;
 using System;
-using Two10.MediaServices;
+using WindowsAzure.Commands.MediaServices.Utilities;
+using Microsoft.WindowsAzure.MediaServices.Client;
 
-namespace Reset
+namespace WindowsAzure.Commands.MediaServices
 {
     /// <summary>
     /// Clears down a media services account prior to demo
     /// USE WITH CARE
     /// </summary>
-    class ResetMediaServicesCommand
+    public class ResetMediaServicesCommand : CmdletWithCloudMediaContext
     {
-        public static void DeleteAllAssets(CloudMediaContext cloudMediaContext)
+        public override void ExecuteCmdlet()
         {
-            foreach (var asset in cloudMediaContext.Assets)
+            DeleteAllJobs(CloudMediaContext);
+            RevokeAllLocators(CloudMediaContext);
+            DeleteAllAssets(CloudMediaContext);
+            DeleteAllAccessPolicies(CloudMediaContext);
+        }
+
+        public static void DeleteAllAssets(CloudMediaContext context)
+        {
+            foreach (var asset in context.Assets)
             {
                 try
                 {
@@ -48,7 +56,7 @@ namespace Reset
 
             }
 
-            foreach (var asset in cloudMediaContext.Assets)
+            foreach (var asset in context.Assets)
             {
                 try
                 {
@@ -62,9 +70,9 @@ namespace Reset
 
         }
 
-        public static void DeleteAllJobs(CloudMediaContext cloudMediaContext)
+        public static void DeleteAllJobs(CloudMediaContext context)
         {
-            foreach (var job in cloudMediaContext.Jobs)
+            foreach (var job in context.Jobs)
             {
                 try
                 {
@@ -77,9 +85,9 @@ namespace Reset
             }
         }
 
-        public static void DeleteAllAccessPolicies(CloudMediaContext cloudMediaContext)
+        public static void DeleteAllAccessPolicies(CloudMediaContext context)
         {
-            foreach (var accessPolicy in cloudMediaContext.AccessPolicies)
+            foreach (var accessPolicy in context.AccessPolicies)
             {
                 try
                 {
@@ -92,33 +100,20 @@ namespace Reset
             }
         }
 
-        public static void RevokeAllLocators(CloudMediaContext cloudMediaContext)
+        public static void RevokeAllLocators(CloudMediaContext context)
         {
-            foreach (var locator in cloudMediaContext.Locators)
+            foreach (var locator in context.Locators)
             {
                 try
                 {
                     
-                    //cloudMediaContext.Locators.Revoke(locator);
+                    //context.Locators.Revoke(locator);
                 }
                 catch (Exception e)
                 {
                     Console.Error.WriteLine("Cant revoke locator {0}, {1}", locator.Id, e);
                 }
             }
-        }
-
-        static void Main(string[] args)
-        {
-            string accountName = Environment.GetEnvironmentVariable("ACCOUNT_NAME");
-            string accountKey = Environment.GetEnvironmentVariable("ACCOUNT_KEY");
-            CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
-
-            DeleteAllJobs(cloudMediaContext);
-            RevokeAllLocators(cloudMediaContext);
-            DeleteAllAssets(cloudMediaContext);
-            DeleteAllAccessPolicies(cloudMediaContext);
-             
         }
     }
 }

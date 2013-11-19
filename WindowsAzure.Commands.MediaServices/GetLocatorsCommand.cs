@@ -15,24 +15,18 @@
 //
 #endregion
 
-using Microsoft.WindowsAzure.MediaServices.Client;
-using System;
+using WindowsAzure.Commands.MediaServices.Utilities;
 
-namespace Locators
+namespace WindowsAzure.Commands.MediaServices
 {
-    class GetLocatorsCommand
+    public class GetLocatorsCommand : CmdletWithCloudMediaContext
     {
-        static void Main(string[] args)
+        public override void ExecuteCmdlet()
         {
-            string accountName = Environment.GetEnvironmentVariable("ACCOUNT_NAME");
-            string accountKey = Environment.GetEnvironmentVariable("ACCOUNT_KEY");
-            CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
-
-            foreach (var locator in cloudMediaContext.Locators)
+            foreach (var locator in CloudMediaContext.Locators)
             {
-                Console.WriteLine("{0}\t{1}\t{2}\t{3}", locator.Id, locator.Path,locator.AssetId,locator.ExpirationDateTime);
+                WriteObject(locator);
             }
-
         }
     }
 }

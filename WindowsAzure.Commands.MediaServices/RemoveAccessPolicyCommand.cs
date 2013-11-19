@@ -15,33 +15,29 @@
 //
 #endregion
 
+using System.Management.Automation;
+using WindowsAzure.Commands.MediaServices.Utilities;
 using Microsoft.WindowsAzure.MediaServices.Client;
-using System;
-using Two10.MediaServices;
 
-namespace DeleteAccessPolicy
+namespace WindowsAzure.Commands.MediaServices
 {
-    class RemoveAccessPolicyCommand
+    public class RemoveAccessPolicyCommand : CmdletWithCloudMediaContext
     {
-        static int Main(string[] args)
+        [Parameter(Mandatory = true)]
+        [ValidateNotNullOrEmpty]
+        public string AccessPolicyId { get; set; }
+
+        public override void ExecuteCmdlet()
         {
-            if (args.Length != 1)
+            IAccessPolicy accessPolicy = CloudMediaContext.FindAcessPolicyById(AccessPolicyId);
+            if (accessPolicy != null)
             {
-                Console.Error.WriteLine("DeleteAccessPolicy <acesss-policy-id>");
-                return -1;
+                accessPolicy.Delete();
             }
-
-            string accountName = Environment.GetEnvironmentVariable("ACCOUNT_NAME");
-            string accountKey = Environment.GetEnvironmentVariable("ACCOUNT_KEY");
-            CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
-
-            string acessPolicyId = args[0];
-            IAccessPolicy accessPolicy = cloudMediaContext.FindAcessPolicyById(acessPolicyId);
-
-            accessPolicy.Delete();
-
-            return 0;
-
+            else
+            {
+                WriteWarning("Access policy was not found");
+            }
         }
     }
 }

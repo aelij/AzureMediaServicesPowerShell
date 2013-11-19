@@ -15,35 +15,26 @@
 //
 #endregion
 
+using System.Management.Automation;
+using WindowsAzure.Commands.MediaServices.Utilities;
 using Microsoft.WindowsAzure.MediaServices.Client;
-using System;
-using Two10.MediaServices;
 
-namespace AssetFiles
+namespace WindowsAzure.Commands.MediaServices
 {
-    class GetAssetFilesCommand
+    public class GetAssetFilesCommand : CmdletWithCloudMediaContext
     {
-        static int Main(string[] args)
+        [Parameter(Mandatory = true)]
+        [ValidateNotNullOrEmpty]
+        public string AssetId { get; set; }
+
+        public override void ExecuteCmdlet()
         {
-            if (args.Length != 1)
-            {
-                Console.Error.WriteLine("AssetFiles <asset-id>");
-                return -1;
-            }
-
-            string accountName = Environment.GetEnvironmentVariable("ACCOUNT_NAME");
-            string accountKey = Environment.GetEnvironmentVariable("ACCOUNT_KEY");
-            CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
-
-            string assetId = args[0];
-            IAsset asset = cloudMediaContext.FindAssetById(assetId);
+            IAsset asset = CloudMediaContext.FindAssetById(AssetId);
 
             foreach (var file in asset.AssetFiles)
             {
-                Console.WriteLine("{0}\t{1}\t{2}", file.Id, file.Name, file.IsEncrypted);
+                WriteObject(file);
             }
-
-            return 0;
         }
     }
 }

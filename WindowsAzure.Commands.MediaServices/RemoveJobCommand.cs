@@ -15,33 +15,30 @@
 //
 #endregion
 
+using System.Management.Automation;
+using WindowsAzure.Commands.MediaServices.Utilities;
 using Microsoft.WindowsAzure.MediaServices.Client;
-using System;
-using Two10.MediaServices;
 
-namespace DeleteJob
+namespace WindowsAzure.Commands.MediaServices
 {
-    class RemoveJobCommand
+    public class RemoveJobCommand : CmdletWithCloudMediaContext
     {
-        static int Main(string[] args)
+        [Parameter(Mandatory = true)]
+        [ValidateNotNullOrEmpty]
+        public string JobId { get; set; }
+
+        public override void ExecuteCmdlet()
         {
-            if (args.Length != 1)
+            IJob job = CloudMediaContext.FindJobById(JobId);
+
+            if (job != null)
             {
-                Console.Error.WriteLine("DeleteJob <job-id>");
-                return -1;
+                job.Delete();
             }
-
-            string accountName = Environment.GetEnvironmentVariable("ACCOUNT_NAME");
-            string accountKey = Environment.GetEnvironmentVariable("ACCOUNT_KEY");
-
-            CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
-
-            string jobId = args[0];
-            IJob job = cloudMediaContext.FindJobById(jobId);
-
-            job.Delete();
-
-            return 0;
+            else
+            {
+                WriteWarning("Job was not found");
+            }
         }
     }
 }

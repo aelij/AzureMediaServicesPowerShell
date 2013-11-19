@@ -15,40 +15,35 @@
 //
 #endregion
 
-using Microsoft.WindowsAzure.MediaServices.Client;
-using System;
 using System.IO;
-using Two10.MediaServices;
+using System.Linq;
+using System.Management.Automation;
+using WindowsAzure.Commands.MediaServices.Utilities;
+using Microsoft.WindowsAzure.MediaServices.Client;
 
-namespace DownloadAsset
+namespace WindowsAzure.Commands.MediaServices
 {
-    class ReceiveAssetCommand
+    public class ReceiveAssetCommand : CmdletWithCloudMediaContext
     {
-        static int Main(string[] args)
+        [Parameter(Mandatory = true)]
+        [ValidateNotNullOrEmpty]
+        public string AssetId { get; set; }
+
+        public override void ExecuteCmdlet()
         {
-            if (args.Length != 1)
-            {
-                Console.Error.WriteLine("DownloadAsset <asset-id> - downloads all asset files.");
-                return -1;
-            }
+            IAsset asset = CloudMediaContext.FindAssetById(AssetId);
 
-            string accountName = Environment.GetEnvironmentVariable("ACCOUNT_NAME");
-            string accountKey = Environment.GetEnvironmentVariable("ACCOUNT_KEY");
-            CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
-
-            string assetId = args[0];
-            IAsset asset = cloudMediaContext.FindAssetById(assetId);
-
-            string folder = asset.Id.ToString().Replace(":", "");
+            string folder = asset.Id.Replace(":", "");
 
             Directory.CreateDirectory(folder);
 
-            foreach (var file in asset.AssetFiles)
+            int index = 1;
+            var assets = asset.AssetFiles.ToArray();
+            foreach (var file in assets)
             {
                 file.Download(string.Format(@"{0}\{1}" ,folder ,file.Name));
+                WriteProgress(new ProgressRecord(0, "Download", string.Format("{0} of {1}", index++, assets.Length)));
             }
-
-            return 0;
         }
     }
 }

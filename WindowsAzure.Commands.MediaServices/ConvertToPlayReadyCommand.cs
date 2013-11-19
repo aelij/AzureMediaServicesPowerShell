@@ -15,51 +15,59 @@
 //
 #endregion
 
-using Microsoft.WindowsAzure.MediaServices.Client;
 using System;
 using System.IO;
-using Two10.MediaServices;
+using System.Management.Automation;
+using WindowsAzure.Commands.MediaServices.Utilities;
+using Microsoft.WindowsAzure.MediaServices.Client;
 
-namespace PlayReady
+namespace WindowsAzure.Commands.MediaServices
 {
-    class ConvertToPlayReadyCommand
+    public class ConvertToPlayReadyCommand : CmdletWithCloudMediaContext
     {
-        static int Main(string[] args)
+        [Parameter(Mandatory = true)]
+        [ValidateNotNullOrEmpty]
+        public string AssetId { get; set; }
+
+        [Parameter(Mandatory = true)]
+        [ValidateNotNullOrEmpty]
+        public string ContentKey { get; set; }
+
+        [Parameter(Mandatory = true)]
+        [ValidateNotNullOrEmpty]
+        public string CustomAttributes { get; set; }
+
+        [Parameter(Mandatory = true)]
+        [ValidateNotNullOrEmpty]
+        public string KeyId { get; set; }
+
+        [Parameter(Mandatory = true)]
+        [ValidateNotNullOrEmpty]
+        public string KeySeedValue { get; set; }
+
+        [Parameter(Mandatory = true)]
+        [ValidateNotNullOrEmpty]
+        public string LicenseAcquisitionUrl { get; set; }
+
+        public override void ExecuteCmdlet()
         {
-            if (args.Length != 6)
-            {
-                Console.Error.WriteLine("PlayReady <asset-id> <contentKey> <customAttributes> <keyId> <keySeedValue> <licenseAcquisitionUrl>");
-                return -1;
-            }
+            IAsset asset = CloudMediaContext.FindAssetById(AssetId);
 
-            string accountName = Environment.GetEnvironmentVariable("ACCOUNT_NAME");
-            string accountKey = Environment.GetEnvironmentVariable("ACCOUNT_KEY");
-            CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
+            IJob job = CloudMediaContext.Jobs.Create("PlayReady Protection Job");
 
-            string assetId = args[0];
-            IAsset asset = cloudMediaContext.FindAssetById(assetId);
-
-            string contentKey = args[1];
-            string customAttributes = args[2];
-            string keyId = args[3];
-            string keySeedValue = args[4];
-            string licenseAcquisitionUrl = args[5];
-
-            IJob job = cloudMediaContext.Jobs.Create("PlayReady Protection Job");
-
-            IMediaProcessor processor = cloudMediaContext.GetMediaProcessor("PlayReady Protection Task");
+            IMediaProcessor processor = CloudMediaContext.GetMediaProcessor("PlayReady Protection Task");
 
             string configuration = File.ReadAllText(Path.GetFullPath("PlayReady Protection.xml"));
-    
-            configuration = String.Format(configuration, contentKey, customAttributes, keyId, keySeedValue, licenseAcquisitionUrl);
+
+            configuration = String.Format(configuration, ContentKey, CustomAttributes, KeyId, KeySeedValue, LicenseAcquisitionUrl);
 
             ITask task = job.Tasks.AddNew("My PlayReady Protection Task",
                 processor,
                 configuration,
-               Microsoft.WindowsAzure.MediaServices.Client.TaskOptions.ProtectedConfiguration);
+               TaskOptions.ProtectedConfiguration);
 
             // Specify the input asset to be encoded.
-            task.InputAssets.Add(asset);    
+            task.InputAssets.Add(asset);
             // Add an output asset to contain the results of the job. Since the
             // asset is already protected with PlayReady, we won't encrypt. 
             task.OutputAssets.AddNew("Output asset",
@@ -67,8 +75,6 @@ namespace PlayReady
 
             // Launch the job. 
             job.Submit();
-
-            return 0;
         }
     }
 }

@@ -15,26 +15,18 @@
 //
 #endregion
 
-using Microsoft.WindowsAzure.MediaServices.Client;
-using System;
+using WindowsAzure.Commands.MediaServices.Utilities;
 
-namespace Jobs
+namespace WindowsAzure.Commands.MediaServices
 {
-    class GetJobsCommand
+    public class GetJobsCommand : CmdletWithCloudMediaContext
     {
-        static void Main(string[] args)
+        public override void ExecuteCmdlet()
         {
-            string accountName = Environment.GetEnvironmentVariable("ACCOUNT_NAME");
-            string accountKey = Environment.GetEnvironmentVariable("ACCOUNT_KEY");
-
-            CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
-
-            foreach (var job in cloudMediaContext.Jobs)
+            foreach (var job in CloudMediaContext.Jobs)
             {
-                Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}", job.Id, job.Name, job.State, job.RunningDuration, job.LastModified);
+                WriteObject(job);
             }
-
-
         }
     }
 }

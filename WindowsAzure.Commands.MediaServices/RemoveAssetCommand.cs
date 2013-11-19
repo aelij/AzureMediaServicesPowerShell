@@ -15,32 +15,30 @@
 //
 #endregion
 
+using System.Management.Automation;
+using WindowsAzure.Commands.MediaServices.Utilities;
 using Microsoft.WindowsAzure.MediaServices.Client;
-using System;
-using Two10.MediaServices;
 
-namespace DeleteAsset
+namespace WindowsAzure.Commands.MediaServices
 {
-    class RemoveAssetCommand
+    public class RemoveAssetCommand : CmdletWithCloudMediaContext
     {
-        static int Main(string[] args)
+        [Parameter(Mandatory = true)]
+        [ValidateNotNullOrEmpty]
+        public string AssetId { get; set; }
+
+        public override void ExecuteCmdlet()
         {
-            if (args.Length != 1)
+            IAsset asset = CloudMediaContext.FindAssetById(AssetId);
+
+            if (asset != null)
             {
-                Console.Error.WriteLine("DeleteAsset <asset-id>");
-                return -1;
+                asset.Delete();
             }
-
-            string accountName = Environment.GetEnvironmentVariable("ACCOUNT_NAME");
-            string accountKey = Environment.GetEnvironmentVariable("ACCOUNT_KEY");
-            CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
-
-            string assetId = args[0];
-            IAsset asset = cloudMediaContext.FindAssetById(assetId);
-
-            asset.Delete();
-
-            return 0;
+            else
+            {
+                WriteWarning("Asset was not found");
+            }
         }
     }
 }

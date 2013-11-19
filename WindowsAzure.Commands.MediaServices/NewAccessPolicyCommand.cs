@@ -15,50 +15,32 @@
 //
 #endregion
 
-using Microsoft.WindowsAzure.MediaServices.Client;
 using System;
+using System.Management.Automation;
+using WindowsAzure.Commands.MediaServices.Utilities;
+using Microsoft.WindowsAzure.MediaServices.Client;
 
-namespace CreateAccessPolicy
+namespace WindowsAzure.Commands.MediaServices
 {
-    class NewAccessPolicyCommand
+    public class NewAccessPolicyCommand : CmdletWithCloudMediaContext
     {
-        static int Main(string[] args)
+        [Parameter(Mandatory = true)]
+        [ValidateNotNullOrEmpty]
+        public string Name { get; set; }
+
+        [Parameter(Mandatory = true)]
+        public TimeSpan Duration { get; set; }
+
+        [Parameter]
+        public AccessPermissions AccessPermissions { get; set; }
+
+        public override void ExecuteCmdlet()
         {
-            if (args.Length != 3)
-            {
-                Console.Error.WriteLine("CreateAccessPolicy <name> <timeSpan> <accessPermissions>");
-                return -1;
-            }
+            IAccessPolicy accessPolicy = CloudMediaContext.AccessPolicies.Create(Name,
+                Duration,
+                AccessPermissions);
 
-            string name = args[0];
-            TimeSpan timeSpan = TimeSpan.Parse(args[1]);
-            AccessPermissions accessPermissions = AccessPermissions.None;
-
-            switch (args[2].ToLower())
-            {
-                case "delete": accessPermissions = AccessPermissions.Delete;
-                    break;
-                case "list": accessPermissions = AccessPermissions.List;
-                    break;
-                case "none": accessPermissions = AccessPermissions.None;
-                    break;
-                case "read": accessPermissions = AccessPermissions.Read;
-                    break;
-                case "write": accessPermissions = AccessPermissions.Write;
-                    break;
-            }
-
-            string accountName = Environment.GetEnvironmentVariable("ACCOUNT_NAME");
-            string accountKey = Environment.GetEnvironmentVariable("ACCOUNT_KEY");
-            CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
-
-            IAccessPolicy streamingPolicy = cloudMediaContext.AccessPolicies.Create(name,
-                timeSpan,
-                accessPermissions);
-
-            Console.WriteLine(streamingPolicy.Id);
-
-            return 0;
+            WriteObject(accessPolicy);
         }
     }
 }

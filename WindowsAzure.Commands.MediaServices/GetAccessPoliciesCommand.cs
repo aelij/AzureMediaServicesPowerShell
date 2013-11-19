@@ -15,22 +15,17 @@
 //
 #endregion
 
-using Microsoft.WindowsAzure.MediaServices.Client;
-using System;
+using WindowsAzure.Commands.MediaServices.Utilities;
 
-namespace AccessPolicies
+namespace WindowsAzure.Commands.MediaServices
 {
-    class GetAccessPoliciesCommand
+    public class GetAccessPoliciesCommand : CmdletWithCloudMediaContext
     {
-        static void Main(string[] args)
+        public override void ExecuteCmdlet()
         {
-            string accountName = Environment.GetEnvironmentVariable("ACCOUNT_NAME");
-            string accountKey = Environment.GetEnvironmentVariable("ACCOUNT_KEY");
-            CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
-
-            foreach (var accessPolicy in cloudMediaContext.AccessPolicies)
+            foreach (var accessPolicy in CloudMediaContext.AccessPolicies)
             {
-                Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}", accessPolicy.Id, accessPolicy.Name, accessPolicy.Permissions.ToString(), accessPolicy.Duration, accessPolicy.LastModified);
+                WriteObject(accessPolicy.Id);
             }
         }
     }

@@ -15,80 +15,46 @@
 //
 #endregion
 
-using Microsoft.WindowsAzure.MediaServices.Client;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.WindowsAzure.MediaServices.Client;
 
-namespace Two10.MediaServices
+namespace WindowsAzure.Commands.MediaServices.Utilities
 {
     public static class CloudMediaContextExtensions
     {
-        public static IAsset FindAssetById(this CloudMediaContext cloudMediaContext, string assetId)
+        public static IAsset FindAssetById(this CloudMediaContext context, string assetId)
         {
-            foreach (var asset in cloudMediaContext.Assets)
-            {
-                if (asset.Id.EndsWith(assetId))
-                    return asset;
-            }
-
-            return null;
+            return Enumerable.FirstOrDefault(context.Assets, asset => asset.Id.EndsWith(assetId));
         }
 
-        public static IAccessPolicy FindAcessPolicyById(this CloudMediaContext cloudMediaContext, string acessPolicyId)
+        public static IAccessPolicy FindAcessPolicyById(this CloudMediaContext context, string acessPolicyId)
         {
-            foreach (var accessPolicy in cloudMediaContext.AccessPolicies)
-            {
-                if (accessPolicy.Id.EndsWith(acessPolicyId))
-                    return accessPolicy;
-            }
-
-            return null;
+            return Enumerable.FirstOrDefault(context.AccessPolicies, accessPolicy => accessPolicy.Id.EndsWith(acessPolicyId));
         }
 
-        public static IJob FindJobById(this CloudMediaContext cloudMediaContext, string jobId)
+        public static IJob FindJobById(this CloudMediaContext context, string jobId)
         {
-            foreach (var job in cloudMediaContext.Jobs)
-            {
-                if (job.Id.EndsWith(jobId))
-                    return job;
-            }
-
-            return null;
+            return Enumerable.FirstOrDefault(context.Jobs, job => job.Id.EndsWith(jobId));
         }
 
-        public static IAssetFile FindFileById(this CloudMediaContext cloudMediaContext, string fileId)
+        public static IAssetFile FindFileById(this CloudMediaContext context, string fileId)
         {
-            foreach (var file in cloudMediaContext.Files)
-            {
-                if (file.Id.EndsWith(fileId))
-                    return file;
-            }
-
-            return null;
+            return Enumerable.FirstOrDefault(context.Files, file => file.Id.EndsWith(fileId));
         }
 
-        public static ITask FindTaskById(this CloudMediaContext cloudMediaContext, string taskId)
+        public static ITask FindTaskById(this CloudMediaContext context, string taskId)
         {
-            foreach (var job in cloudMediaContext.Jobs)
-            {
-                foreach (var task in job.Tasks)
-                {
-                    if (task.Id.EndsWith(taskId))
-                        return task;
-                }
-            }
-
-            return null;
+            return Enumerable.FirstOrDefault(context.Jobs.SelectMany(job => job.Tasks), task => task.Id.EndsWith(taskId));
         }
 
-        public static IMediaProcessor GetMediaProcessor(this CloudMediaContext cloudMediaContext, string mediaProcessorName)
+        public static IMediaProcessor GetMediaProcessor(this CloudMediaContext context, string mediaProcessorName)
         {
-
-            var mediaProcessors = from p in cloudMediaContext.MediaProcessors
+            var mediaProcessors = from p in context.MediaProcessors
                 where p.Name == mediaProcessorName
                 select p;
 
@@ -97,15 +63,15 @@ namespace Two10.MediaServices
             if (mediaProcessor == null)
             {
                 throw new ArgumentException(string.Format(System.Globalization.CultureInfo.CurrentCulture,
-                    "Unknown media processor",
+                    "Unknown media processor {0}",
                     mediaProcessorName));
             }
             return mediaProcessor;
         }
 
-        static private IAsset CreateEmptyAsset(this CloudMediaContext cloudMediaContext, string assetName, AssetCreationOptions assetCreationOptions)
+        static private IAsset CreateEmptyAsset(this CloudMediaContext context, string assetName, AssetCreationOptions assetCreationOptions)
         {
-            var asset = cloudMediaContext.Assets.Create(assetName, assetCreationOptions);
+            var asset = context.Assets.Create(assetName, assetCreationOptions);
 
             //Console.WriteLine("Asset name: " + asset.Name);
             //Console.WriteLine("Time created: " + asset.Created.Date.ToString());
@@ -113,22 +79,22 @@ namespace Two10.MediaServices
             return asset;
         }
 
-        static public IAsset CreateAssetAndUploadSingleFile(this CloudMediaContext cloudMediaContext, AssetCreationOptions assetCreationOptions, string singleFilePath)
+        static public IAsset CreateAssetAndUploadSingleFile(this CloudMediaContext context, AssetCreationOptions assetCreationOptions, string singleFilePath)
         {
             var fileName = Path.GetFileName(singleFilePath);
 
             var assetName = fileName; // +"-" + DateTime.UtcNow.ToString("o");
 
-            var asset = cloudMediaContext.CreateEmptyAsset(assetName, assetCreationOptions);
+            var asset = context.CreateEmptyAsset(assetName, assetCreationOptions);
 
             var assetFile = asset.AssetFiles.Create(fileName);
 
             //Console.WriteLine("Created assetFile {0}", assetFile.Name);
 
-            var accessPolicy = cloudMediaContext.AccessPolicies.Create(assetName, TimeSpan.FromDays(3),
+            var accessPolicy = context.AccessPolicies.Create(assetName, TimeSpan.FromDays(3),
                                                                 AccessPermissions.Write | AccessPermissions.List);
 
-            var locator = cloudMediaContext.Locators.CreateLocator(LocatorType.Sas, asset, accessPolicy);
+            var locator = context.Locators.CreateLocator(LocatorType.Sas, asset, accessPolicy);
 
             //Console.WriteLine("Upload {0}", assetFile.Name);
 
@@ -141,25 +107,27 @@ namespace Two10.MediaServices
             return asset;
         }
 
-        static public IAsset CreateAssetAndUploadMultipleFiles(this CloudMediaContext cloudMediaContext, AssetCreationOptions assetCreationOptions, string folderPath)
+        static public IAsset CreateAssetAndUploadMultipleFiles(this CloudMediaContext context, AssetCreationOptions assetCreationOptions, string folderPath)
         {
-            var assetName = "UploadMultipleFiles_" + DateTime.UtcNow.ToString();
+            var assetName = "UploadMultipleFiles_" + DateTime.UtcNow;
 
-            var asset = cloudMediaContext.CreateEmptyAsset(assetName, assetCreationOptions);
+            var asset = context.CreateEmptyAsset(assetName, assetCreationOptions);
 
-            var accessPolicy = cloudMediaContext.AccessPolicies.Create(assetName, TimeSpan.FromDays(30),
+            var accessPolicy = context.AccessPolicies.Create(assetName, TimeSpan.FromDays(30),
                                                                 AccessPermissions.Write | AccessPermissions.List);
-            var locator = cloudMediaContext.Locators.CreateLocator(LocatorType.Sas, asset, accessPolicy);
+            var locator = context.Locators.CreateLocator(LocatorType.Sas, asset, accessPolicy);
 
-            var blobTransferClient = new BlobTransferClient();
-            blobTransferClient.NumberOfConcurrentTransfers = 20;
-            blobTransferClient.ParallelTransferThreadCount = 20;
+            var blobTransferClient = new BlobTransferClient
+            {
+                NumberOfConcurrentTransfers = 20,
+                ParallelTransferThreadCount = 20
+            };
 
             blobTransferClient.TransferProgressChanged += blobTransferClient_TransferProgressChanged;
 
-            var filePaths = Directory.EnumerateFiles(folderPath);
+            var filePaths = Directory.GetFiles(folderPath);
 
-            Console.WriteLine("There are {0} files in {1}", filePaths.Count(), folderPath);
+            Console.WriteLine("There are {0} files in {1}", filePaths.Length, folderPath);
 
             if (!filePaths.Any())
             {
@@ -196,11 +164,11 @@ namespace Two10.MediaServices
             }
         }
 
-        public static IJob CreateThumbnails(this CloudMediaContext cloudMediaContext, IAsset asset)
-        {     
-            IJob job = cloudMediaContext.Jobs.Create(string.Format("Thumbnails for {0}", asset.Name));
+        public static IJob CreateThumbnails(this CloudMediaContext context, IAsset asset)
+        {
+            IJob job = context.Jobs.Create(string.Format("Thumbnails for {0}", asset.Name));
 
-            IMediaProcessor processor = cloudMediaContext.GetMediaProcessor("Windows Azure Media Encoder");
+            IMediaProcessor processor = context.GetMediaProcessor("Windows Azure Media Encoder");
 
             ITask task = job.Tasks.AddNew(string.Format("Thumbnails for {0}", asset.Name),
                 processor,
@@ -216,7 +184,7 @@ namespace Two10.MediaServices
             return job;
         }
 
-        public static ILocator GetStreamingOriginLocator(this CloudMediaContext cloudMediaContext, IAsset assetToStream)
+        public static ILocator GetStreamingOriginLocator(this CloudMediaContext context, IAsset assetToStream)
         {
             
 
@@ -228,16 +196,14 @@ namespace Two10.MediaServices
                                 select f;
             // Cast the reference to a true IAssetFile type. 
             IAssetFile manifestFile = theManifest.First();
-            IAccessPolicy policy = null;
-            ILocator originLocator = null;
 
             // Create a 30-day readonly access policy. 
-            policy = cloudMediaContext.AccessPolicies.Create("Streaming policy",
+            IAccessPolicy policy = context.AccessPolicies.Create("Streaming policy",
                 TimeSpan.FromDays(30),
                 AccessPermissions.Read);
 
             // Create a locator to the streaming content on an origin. 
-            originLocator = cloudMediaContext.Locators.CreateLocator(LocatorType.OnDemandOrigin, assetToStream,
+            ILocator originLocator = context.Locators.CreateLocator(LocatorType.OnDemandOrigin, assetToStream,
                 policy,
                 DateTime.UtcNow.AddMinutes(-5));
 
@@ -261,7 +227,7 @@ namespace Two10.MediaServices
             return originLocator;
         }
 
-        public static IMediaProcessor GetLatestMediaProcessorByName(this CloudMediaContext cloudMediaContext, string mediaProcessorName)
+        public static IMediaProcessor GetLatestMediaProcessorByName(this CloudMediaContext context, string mediaProcessorName)
         {
             // The possible strings that can be passed into the
             // method for the mediaProcessor parameter:
@@ -270,11 +236,11 @@ namespace Two10.MediaServices
             //   Windows Azure Media Encryptor
             //   Storage Decryption
 
-            var processor = cloudMediaContext.MediaProcessors.Where(p => p.Name == mediaProcessorName).
+            var processor = context.MediaProcessors.Where(p => p.Name == mediaProcessorName).
                 ToList().OrderBy(p => new Version(p.Version)).LastOrDefault();
 
             if (processor == null)
-                throw new ArgumentException(string.Format("Unknown media processor", mediaProcessorName));
+                throw new ArgumentException(string.Format("Unknown media processor {0}", mediaProcessorName));
 
             return processor;
         }

@@ -15,38 +15,30 @@
 //
 #endregion
 
+using System.Management.Automation;
+using WindowsAzure.Commands.MediaServices.Utilities;
 using Microsoft.WindowsAzure.MediaServices.Client;
-using System;
-using Two10.MediaServices;
 
-namespace MP4ToHLS
+namespace WindowsAzure.Commands.MediaServices
 {
-    class ConvertMp4ToHlsCommand
+    public class ConvertMp4ToHlsCommand : CmdletWithCloudMediaContext
     {
-        static int Main(string[] args)
+        [Parameter(Mandatory = true)]
+        [ValidateNotNullOrEmpty]
+        public string AssetId { get; set; }
+
+        public override void ExecuteCmdlet()
         {
-            if (args.Length != 1)
-            {
-                Console.Error.WriteLine("MP4ToHLS <asset-id>");
-                return -1;
-            }
+            IAsset asset = CloudMediaContext.FindAssetById(AssetId);
 
-            string accountName = Environment.GetEnvironmentVariable("ACCOUNT_NAME");
-            string accountKey = Environment.GetEnvironmentVariable("ACCOUNT_KEY");
-            CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
+            IJob job = CloudMediaContext.Jobs.Create(string.Format("Convert {0} to HLS Asset", asset.Name));
 
-            string assetId = args[0];
-            IAsset asset = cloudMediaContext.FindAssetById(assetId);
-
-            IJob job = cloudMediaContext.Jobs.Create(string.Format("Convert {0} to HLS Asset", asset.Name));
-
-            IMediaProcessor processor = cloudMediaContext.GetMediaProcessor("Windows Azure Media Encoder");
+            IMediaProcessor processor = CloudMediaContext.GetMediaProcessor("Windows Azure Media Encoder");
 
             ITask task = job.Tasks.AddNew("MP4 to HLS",
                 processor,
                 "H264 Adaptive Bitrate MP4 Set SD 16x9",
-                Microsoft.WindowsAzure.MediaServices.Client.TaskOptions.ProtectedConfiguration);
-
+                TaskOptions.ProtectedConfiguration);
 
             task.InputAssets.Add(asset);
 
@@ -56,9 +48,8 @@ namespace MP4ToHLS
 
             job.Submit();
 
-            Console.WriteLine(job.Id);
-            Console.WriteLine("Once job is complete, retrieve StreamingURL and append (format=m3u8-aapl)");
-            return 0;
+            WriteObject(job.Id);
+            WriteVerbose("Once job is complete, retrieve StreamingURL and append (format=m3u8-aapl)");
         }
     }
 }

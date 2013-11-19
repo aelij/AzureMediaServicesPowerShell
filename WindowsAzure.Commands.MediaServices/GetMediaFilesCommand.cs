@@ -15,26 +15,18 @@
 //
 #endregion
 
-using Microsoft.WindowsAzure.MediaServices.Client;
-using System;
+using WindowsAzure.Commands.MediaServices.Utilities;
 
-namespace Files
+namespace WindowsAzure.Commands.MediaServices
 {
-    class GetMediaFilesCommand
+    public class GetMediaFilesCommand : CmdletWithCloudMediaContext
     {
-        static int Main(string[] args)
+        public override void ExecuteCmdlet()
         {
-            string accountName = Environment.GetEnvironmentVariable("ACCOUNT_NAME");
-            string accountKey = Environment.GetEnvironmentVariable("ACCOUNT_KEY");
-
-            CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
-
-            foreach (var file in cloudMediaContext.Files)
+            foreach (var file in CloudMediaContext.Files)
             {
-                Console.WriteLine("{0}\t{1}\t{2}\t{3}", file.Id,file.Name, file.IsEncrypted,file.LastModified);           
+                WriteObject(file);
             }
-
-            return 0;
         }
     }
 }

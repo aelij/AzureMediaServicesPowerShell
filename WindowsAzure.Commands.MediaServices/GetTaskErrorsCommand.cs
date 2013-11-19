@@ -15,36 +15,26 @@
 //
 #endregion
 
+using System.Management.Automation;
+using WindowsAzure.Commands.MediaServices.Utilities;
 using Microsoft.WindowsAzure.MediaServices.Client;
-using System;
-using Two10.MediaServices;
 
-namespace ErrorDetails
+namespace WindowsAzure.Commands.MediaServices
 {
-    class GetTaskErrorsCommand
+    public class GetTaskErrorsCommand : CmdletWithCloudMediaContext
     {
-        static int Main(string[] args)
+        [Parameter(Mandatory = true)]
+        [ValidateNotNullOrEmpty]
+        public string TaskId { get; set; }
+
+        public override void ExecuteCmdlet()
         {
-            if (args.Length != 1)
-            {
-                Console.Error.WriteLine("ErrorDetails <task-id>");
-                return -1;
-            }
-
-            string accountName = Environment.GetEnvironmentVariable("ACCOUNT_NAME");
-            string accountKey = Environment.GetEnvironmentVariable("ACCOUNT_KEY");
-            CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
-
-            string taskId = args[0];
-
-            ITask task = cloudMediaContext.FindTaskById(taskId);
+            ITask task = CloudMediaContext.FindTaskById(TaskId);
 
             foreach (var errorDetail in task.ErrorDetails)
             {
-                Console.WriteLine("{0}\t{1}", errorDetail.Code, errorDetail.Message);
+                WriteObject(errorDetail);
             }
-
-            return 0;
         }
     }
 }

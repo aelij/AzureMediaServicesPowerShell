@@ -15,34 +15,25 @@
 //
 #endregion
 
+using System.Management.Automation;
+using WindowsAzure.Commands.MediaServices.Utilities;
 using Microsoft.WindowsAzure.MediaServices.Client;
-using System;
-using Two10.MediaServices;
 
-namespace Thumbnail
+namespace WindowsAzure.Commands.MediaServices
 {
-    class ConvertToThumbnailCommand
+    public class ConvertToThumbnailCommand : CmdletWithCloudMediaContext
     {
-        static int Main(string[] args)
+        [Parameter(Mandatory = true)]
+        [ValidateNotNullOrEmpty]
+        public string AssetId { get; set; }
+
+        public override void ExecuteCmdlet()
         {
-            if (args.Length != 1)
-            {
-                Console.Error.WriteLine("Thumbnail <asset-id>");
-                return -1;
-            }
+            IAsset asset = CloudMediaContext.FindAssetById(AssetId);
 
-            string accountName = Environment.GetEnvironmentVariable("ACCOUNT_NAME");
-            string accountKey = Environment.GetEnvironmentVariable("ACCOUNT_KEY");
-            CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
+            IJob job = CloudMediaContext.CreateThumbnails(asset);
 
-            string assetId = args[0];
-            IAsset asset = cloudMediaContext.FindAssetById(assetId);
-
-            IJob job = cloudMediaContext.CreateThumbnails(asset);
-
-            Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}", job.Id, job.Name, job.State, job.RunningDuration, job.LastModified);
-
-            return 0;
+            WriteObject(job);
         }
     }
 }

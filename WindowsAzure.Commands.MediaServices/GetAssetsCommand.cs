@@ -15,25 +15,18 @@
 //
 #endregion
 
-using Microsoft.WindowsAzure.MediaServices.Client;
-using System;
-using Two10.MediaServices;
+using WindowsAzure.Commands.MediaServices.Utilities;
 
-namespace Assets
+namespace WindowsAzure.Commands.MediaServices
 {
-    class GetAssetsCommand
+    public class GetAssetsCommand : CmdletWithCloudMediaContext
     {
-        static void Main(string[] args)
+        public override void ExecuteCmdlet()
         {
-            string accountName = Environment.GetEnvironmentVariable("ACCOUNT_NAME");
-            string accountKey = Environment.GetEnvironmentVariable("ACCOUNT_KEY");
-            CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
-
-            foreach (var asset in cloudMediaContext.Assets)
+            foreach (var asset in CloudMediaContext.Assets)
             {
-                Console.WriteLine("{0}\t{1}\t{2}\t{3}", asset.Id,asset.Name,asset.State,asset.LastModified);
+                WriteObject(asset);
             }
-
         }
     }
 }

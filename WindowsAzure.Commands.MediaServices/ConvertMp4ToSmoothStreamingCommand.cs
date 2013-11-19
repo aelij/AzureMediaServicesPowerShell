@@ -15,51 +15,40 @@
 //
 #endregion
 
+using System.Management.Automation;
+using WindowsAzure.Commands.MediaServices.Utilities;
 using Microsoft.WindowsAzure.MediaServices.Client;
-using System;
-using Two10.MediaServices;
 
-namespace MP4ToSmoothStream
+namespace WindowsAzure.Commands.MediaServices
 {
-    class ConvertMp4ToSmoothStreamingCommand
+    public class ConvertMp4ToSmoothStreamingCommand : CmdletWithCloudMediaContext
     {
+        [Parameter(Mandatory = true)]
+        [ValidateNotNullOrEmpty]
+        public string AssetId { get; set; }
 
-        static int Main(string[] args)
+        public override void ExecuteCmdlet()
         {
-            if (args.Length != 1)
-            {
-                Console.Error.WriteLine("MP4ToSmoothStream <asset-id>");
-                return -1;
-            }
+            IAsset asset = CloudMediaContext.FindAssetById(AssetId);
 
-            string accountName = Environment.GetEnvironmentVariable("ACCOUNT_NAME");
-            string accountKey = Environment.GetEnvironmentVariable("ACCOUNT_KEY");
-            CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
+            IJob job = CloudMediaContext.Jobs.Create(string.Format("Convert {0} to Smooth Stream", asset.Name));
 
-            string assetId = args[0];
-            IAsset asset = cloudMediaContext.FindAssetById(assetId);
-
-            IJob job = cloudMediaContext.Jobs.Create(string.Format("Convert {0} to Smooth Stream", asset.Name));
-
-            IMediaProcessor processor = cloudMediaContext.GetMediaProcessor("Windows Azure Media Encoder");
+            IMediaProcessor processor = CloudMediaContext.GetMediaProcessor("Windows Azure Media Encoder");
 
             ITask task = job.Tasks.AddNew("MP4 to Smooth Stream Conversion",
                 processor,
                 "H264 Smooth Streaming 720p", // Task Preset. Amend as required.
-                Microsoft.WindowsAzure.MediaServices.Client.TaskOptions.ProtectedConfiguration);
-
+                TaskOptions.ProtectedConfiguration);
 
             task.InputAssets.Add(asset);
 
-     
+
             task.OutputAssets.AddNew(string.Format("Smooth Stream for {0}", asset.Name),
                 AssetCreationOptions.None);
 
             job.Submit();
 
-            Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}", job.Id, job.Name, job.State, job.RunningDuration, job.LastModified);
-            
-            return 0;
+            WriteObject(job);
         }
     }
 }

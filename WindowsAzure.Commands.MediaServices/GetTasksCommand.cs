@@ -15,36 +15,26 @@
 //
 #endregion
 
+using System.Management.Automation;
+using WindowsAzure.Commands.MediaServices.Utilities;
 using Microsoft.WindowsAzure.MediaServices.Client;
-using System;
-using Two10.MediaServices;
 
-namespace Tasks
+namespace WindowsAzure.Commands.MediaServices
 {
-    class GetTasksCommand
+    public class GetTasksCommand : CmdletWithCloudMediaContext
     {
-        static int Main(string[] args)
+        [Parameter(Mandatory = true)]
+        [ValidateNotNullOrEmpty]
+        public string JobId { get; set; }
+
+        public override void ExecuteCmdlet()
         {
-            if (args.Length != 1)
-            {
-                Console.Error.WriteLine("Tasks <job-id>");
-                return -1;
-            }
-
-            string accountName = Environment.GetEnvironmentVariable("ACCOUNT_NAME");
-            string accountKey = Environment.GetEnvironmentVariable("ACCOUNT_KEY");
-            CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
-
-            string jobId = args[0];
-
-            IJob job = cloudMediaContext.FindJobById(jobId);
+            IJob job = CloudMediaContext.FindJobById(JobId);
 
             foreach (var task in job.Tasks)
             {
-                Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}", task.Id, task.Name,task.State, task.Progress,task.ErrorDetails.Count);
+                WriteObject(task);
             }
-
-            return 0;
         }
     }
 }

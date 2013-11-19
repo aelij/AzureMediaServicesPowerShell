@@ -15,36 +15,29 @@
 //
 #endregion
 
+using System.Management.Automation;
+using WindowsAzure.Commands.MediaServices.Utilities;
 using Microsoft.WindowsAzure.MediaServices.Client;
-using System;
-using Two10.MediaServices;
 
-namespace DecryptAsset
+namespace WindowsAzure.Commands.MediaServices
 {
-    class UnprotectAssetCommand
+    public class UnprotectAssetCommand : CmdletWithCloudMediaContext
     {
-        static int Main(string[] args)
+        [Parameter(Mandatory = true)]
+        [ValidateNotNullOrEmpty]
+        public string AssetId { get; set; }
+
+        public override void ExecuteCmdlet()
         {
-            if (args.Length != 1)
-            {
-                Console.Error.WriteLine("DecryptAsset <asset-id>");
-                return -1;
-            }
+            IAsset asset = CloudMediaContext.FindAssetById(AssetId);
 
-            string accountName = Environment.GetEnvironmentVariable("ACCOUNT_NAME");
-            string accountKey = Environment.GetEnvironmentVariable("ACCOUNT_KEY");
-            CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
+            IJob job = CloudMediaContext.Jobs.Create(string.Format("Decrypt {0}", asset.Name));
 
-            string assetId = args[0];
-            IAsset asset = cloudMediaContext.FindAssetById(assetId);
-
-            IJob job = cloudMediaContext.Jobs.Create(string.Format("Decrypt {0}", asset.Name));
-
-            IMediaProcessor decryptProcessor = cloudMediaContext.GetMediaProcessor("Storage Decryption");
+            IMediaProcessor decryptProcessor = CloudMediaContext.GetMediaProcessor("Storage Decryption");
 
             ITask decryptTask = job.Tasks.AddNew(string.Format("Decrypt {0}", asset.Name),
                     decryptProcessor,string.Empty,
-                    Microsoft.WindowsAzure.MediaServices.Client.TaskOptions.None);
+                    TaskOptions.None);
 
             decryptTask.InputAssets.Add(asset);
 
@@ -53,9 +46,7 @@ namespace DecryptAsset
 
             job.Submit();
 
-            Console.WriteLine(job.Id);
-
-            return 0;       
+            WriteObject(job);
         }
     }
 }

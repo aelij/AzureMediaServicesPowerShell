@@ -15,18 +15,17 @@
 //
 #endregion
 
-using System;
-using Two10.MediaServices;
+using WindowsAzure.Commands.MediaServices.Utilities;
 
-namespace TaskPresets
+namespace WindowsAzure.Commands.MediaServices
 {
-    class GetTaskPresetsCommand
+    public class GetTaskPresetsCommand : CmdletWithCloudMediaContext
     {
-        static void Main(string[] args)
+        public override void ExecuteCmdlet()
         {
-            foreach (var taskPreset in Constants.taskPresets)
+            foreach (var taskPreset in Constants.TaskPresets)
             {
-                Console.WriteLine(taskPreset);
+                WriteObject(taskPreset);
             }
         }
     }

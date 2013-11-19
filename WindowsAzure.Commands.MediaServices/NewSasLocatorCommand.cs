@@ -15,35 +15,27 @@
 //
 #endregion
 
-using Microsoft.WindowsAzure.MediaServices.Client;
 using System;
-using Two10.MediaServices;
+using System.Management.Automation;
+using WindowsAzure.Commands.MediaServices.Utilities;
+using Microsoft.WindowsAzure.MediaServices.Client;
 
-namespace MakeSasLocator
+namespace WindowsAzure.Commands.MediaServices
 {
-    class NewSasLocatorCommand
+    public class NewSasLocatorCommand : CmdletWithCloudMediaContext
     {
-        static int Main(string[] args)
+        [Parameter(Mandatory = true)]
+        [ValidateNotNullOrEmpty]
+        public string AssetId { get; set; }
+
+        public override void ExecuteCmdlet()
         {
-            if (args.Length != 1)
-            {
-                Console.Error.WriteLine("MakeSasLocator <asset-id>");
-                return -1;
-            }
+            IAsset asset = CloudMediaContext.FindAssetById(AssetId);
 
-            string accountName = Environment.GetEnvironmentVariable("ACCOUNT_NAME");
-            string accountKey = Environment.GetEnvironmentVariable("ACCOUNT_KEY");
-            CloudMediaContext cloudMediaContext = new CloudMediaContext(accountName, accountKey);
+            IAccessPolicy accessPolicy = CloudMediaContext.AccessPolicies.Create("File Download Policy", TimeSpan.FromDays(30), AccessPermissions.Read);
+            ILocator locator = CloudMediaContext.Locators.CreateSasLocator(asset, accessPolicy);
 
-            string assetId = args[0];
-            IAsset asset = cloudMediaContext.FindAssetById(assetId);
-
-            IAccessPolicy accessPolicy = cloudMediaContext.AccessPolicies.Create("File Download Policy", TimeSpan.FromDays(30), AccessPermissions.Read);
-            ILocator locator = cloudMediaContext.Locators.CreateSasLocator(asset, accessPolicy);
-
-            Console.WriteLine("{0}\t{1}\t{2}\t{3}", locator.Id,locator.Path,locator.Type,locator.ExpirationDateTime);
-
-            return 0;
+            WriteObject(locator);
         }
     }
 }
