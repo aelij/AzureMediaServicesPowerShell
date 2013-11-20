@@ -21,6 +21,7 @@ using Microsoft.WindowsAzure.MediaServices.Client;
 
 namespace WindowsAzure.Commands.MediaServices
 {
+    [Cmdlet(VerbsSecurity.Unprotect, "Asset")]
     public class UnprotectAssetCommand : CmdletWithCloudMediaContext
     {
         [Parameter(Mandatory = true)]

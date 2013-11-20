@@ -22,6 +22,7 @@ using Microsoft.WindowsAzure.MediaServices.Client;
 
 namespace WindowsAzure.Commands.MediaServices
 {
+    [Cmdlet(VerbsCommon.New, "SasLocator")]
     public class NewSasLocatorCommand : CmdletWithCloudMediaContext
     {
         [Parameter(Mandatory = true)]

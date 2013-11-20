@@ -23,6 +23,7 @@ using Microsoft.WindowsAzure.MediaServices.Client;
 
 namespace WindowsAzure.Commands.MediaServices
 {
+    [Cmdlet(VerbsCommunications.Receive, "Asset")]
     public class ReceiveAssetCommand : CmdletWithCloudMediaContext
     {
         [Parameter(Mandatory = true)]

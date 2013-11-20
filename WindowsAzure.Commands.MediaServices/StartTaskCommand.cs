@@ -8,6 +8,7 @@ using Microsoft.WindowsAzure.MediaServices.Client;
 
 namespace WindowsAzure.Commands.MediaServices
 {
+    [Cmdlet(VerbsLifecycle.Start, "Task")]
     public class StartTaskCommand : CmdletWithCloudMediaContext
     {
         [Parameter(Mandatory = true)]

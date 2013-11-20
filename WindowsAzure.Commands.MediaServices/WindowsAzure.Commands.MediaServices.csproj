@@ -71,6 +71,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\WindowsPowerShell\3.0\System.Management.Automation.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Spatial, Version=5.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\System.Spatial.5.5.0\lib\net40\System.Spatial.dll</HintPath>
@@ -82,11 +83,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConvertMp4ToHlsCommand.cs" />
-    <Compile Include="ConvertMp4ToSmoothStreamingCommand.cs" />
-    <Compile Include="ConvertToMp4Command.cs" />
     <Compile Include="ConvertToPlayReadyCommand.cs" />
-    <Compile Include="ConvertToThumbnailCommand.cs" />
     <Compile Include="GetAccessPoliciesCommand.cs">
       <SubType>Code</SubType>
     </Compile>

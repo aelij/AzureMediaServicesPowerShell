@@ -73,9 +73,6 @@ namespace WindowsAzure.Commands.MediaServices.Utilities
         {
             var asset = context.Assets.Create(assetName, assetCreationOptions);
 
-            //Console.WriteLine("Asset name: " + asset.Name);
-            //Console.WriteLine("Time created: " + asset.Created.Date.ToString());
-
             return asset;
         }
 
@@ -89,17 +86,13 @@ namespace WindowsAzure.Commands.MediaServices.Utilities
 
             var assetFile = asset.AssetFiles.Create(fileName);
 
-            //Console.WriteLine("Created assetFile {0}", assetFile.Name);
 
             var accessPolicy = context.AccessPolicies.Create(assetName, TimeSpan.FromDays(3),
                                                                 AccessPermissions.Write | AccessPermissions.List);
 
             var locator = context.Locators.CreateLocator(LocatorType.Sas, asset, accessPolicy);
 
-            //Console.WriteLine("Upload {0}", assetFile.Name);
-
             assetFile.Upload(singleFilePath);
-            //Console.WriteLine("Done uploading of {0} using Upload()", assetFile.Name);
 
             locator.Delete();
             accessPolicy.Delete();
@@ -164,30 +157,8 @@ namespace WindowsAzure.Commands.MediaServices.Utilities
             }
         }
 
-        public static IJob CreateThumbnails(this CloudMediaContext context, IAsset asset)
-        {
-            IJob job = context.Jobs.Create(string.Format("Thumbnails for {0}", asset.Name));
-
-            IMediaProcessor processor = context.GetMediaProcessor("Windows Azure Media Encoder");
-
-            ITask task = job.Tasks.AddNew(string.Format("Thumbnails for {0}", asset.Name),
-                processor,
-                "Thumbnails",TaskOptions.ProtectedConfiguration);
-
-            task.InputAssets.Add(asset);
-
-            task.OutputAssets.AddNew("Output asset",
-                AssetCreationOptions.None);
-
-            job.Submit();
-
-            return job;
-        }
-
         public static ILocator GetStreamingOriginLocator(this CloudMediaContext context, IAsset assetToStream)
         {
-            
-
             // Get a reference to the streaming manifest file from the  
             // collection of files in the asset. 
             var theManifest =

@@ -23,6 +23,7 @@ using Microsoft.WindowsAzure.MediaServices.Client;
 
 namespace WindowsAzure.Commands.MediaServices
 {
+    [Cmdlet(VerbsData.ConvertTo, "PlayReady")]
     public class ConvertToPlayReadyCommand : CmdletWithCloudMediaContext
     {
         [Parameter(Mandatory = true)]

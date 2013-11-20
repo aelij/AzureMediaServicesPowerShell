@@ -22,6 +22,7 @@ using Microsoft.WindowsAzure.MediaServices.Client;
 
 namespace WindowsAzure.Commands.MediaServices
 {
+    [Cmdlet(VerbsCommunications.Send, "AssetFile")]
     public class SendAssetFileCommand : CmdletWithCloudMediaContext
     {
         [Parameter(Mandatory = true)]

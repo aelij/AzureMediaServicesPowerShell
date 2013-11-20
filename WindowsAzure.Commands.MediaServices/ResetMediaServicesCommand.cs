@@ -16,6 +16,7 @@
 #endregion
 
 using System;
+using System.Management.Automation;
 using WindowsAzure.Commands.MediaServices.Utilities;
 using Microsoft.WindowsAzure.MediaServices.Client;
 
@@ -25,17 +26,32 @@ namespace WindowsAzure.Commands.MediaServices
     /// Clears down a media services account prior to demo
     /// USE WITH CARE
     /// </summary>
+    [Cmdlet(VerbsCommon.Reset, "MediaServices", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.High)]
     public class ResetMediaServicesCommand : CmdletWithCloudMediaContext
     {
         public override void ExecuteCmdlet()
         {
-            DeleteAllJobs(CloudMediaContext);
-            RevokeAllLocators(CloudMediaContext);
-            DeleteAllAssets(CloudMediaContext);
-            DeleteAllAccessPolicies(CloudMediaContext);
+            if (ShouldProcess("Reset all media services"))
+            {
+                if (ShouldContinue("", ""))
+                {
+
+                    DeleteAllJobs(CloudMediaContext);
+                    RevokeAllLocators(CloudMediaContext);
+                    DeleteAllAssets(CloudMediaContext);
+                    DeleteAllAccessPolicies(CloudMediaContext);
+                }
+            }
         }
 
-        public static void DeleteAllAssets(CloudMediaContext context)
+        private void WriteError(string messageFormat, string id, Exception e)
+        {
+            WriteError(
+                new ErrorRecord(new Exception(string.Format(messageFormat, id, e), e),
+                    string.Empty, ErrorCategory.WriteError, null));
+        }
+
+        private void DeleteAllAssets(CloudMediaContext context)
         {
             foreach (var asset in context.Assets)
             {
@@ -51,9 +67,8 @@ namespace WindowsAzure.Commands.MediaServices
                 }
                 catch (Exception e)
                 {
-                    Console.Error.WriteLine("Cant remove content keys for asset {0}, {1}", asset.Id, e);
+                    WriteError("Cant remove content keys for asset {0}, {1}", asset.Id, e);
                 }
-
             }
 
             foreach (var asset in context.Assets)
@@ -64,13 +79,13 @@ namespace WindowsAzure.Commands.MediaServices
                 }
                 catch (Exception e)
                 {
-                    Console.Error.WriteLine("Cant delete asset {0}, {1}", asset.Id, e);
+                    WriteError("Cant delete asset {0}, {1}", asset.Id, e);
                 }
             }
 
         }
 
-        public static void DeleteAllJobs(CloudMediaContext context)
+        private void DeleteAllJobs(CloudMediaContext context)
         {
             foreach (var job in context.Jobs)
             {
@@ -80,12 +95,12 @@ namespace WindowsAzure.Commands.MediaServices
                 }
                 catch (Exception e)
                 {
-                    Console.Error.WriteLine("Cant delete Job {0}, {1}", job.Id, e);
+                    WriteError("Cant delete Job {0}, {1}", job.Id, e);
                 }
             }
         }
 
-        public static void DeleteAllAccessPolicies(CloudMediaContext context)
+        private void DeleteAllAccessPolicies(CloudMediaContext context)
         {
             foreach (var accessPolicy in context.AccessPolicies)
             {
@@ -95,23 +110,22 @@ namespace WindowsAzure.Commands.MediaServices
                 }
                 catch (Exception e)
                 {
-                    Console.Error.WriteLine("Cant delete access policy {0}, {1}", accessPolicy.Id, e);
+                    WriteError("Cant delete access policy {0}, {1}", accessPolicy.Id, e);
                 }
             }
         }
 
-        public static void RevokeAllLocators(CloudMediaContext context)
+        private void RevokeAllLocators(CloudMediaContext context)
         {
             foreach (var locator in context.Locators)
             {
                 try
                 {
-                    
                     //context.Locators.Revoke(locator);
                 }
                 catch (Exception e)
                 {
-                    Console.Error.WriteLine("Cant revoke locator {0}, {1}", locator.Id, e);
+                    WriteError("Cant revoke locator {0}, {1}", locator.Id, e);
                 }
             }
         }

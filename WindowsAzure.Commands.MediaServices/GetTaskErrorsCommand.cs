@@ -21,6 +21,7 @@ using Microsoft.WindowsAzure.MediaServices.Client;
 
 namespace WindowsAzure.Commands.MediaServices
 {
+    [Cmdlet(VerbsCommon.Get, "TaskErrors")]
     public class GetTaskErrorsCommand : CmdletWithCloudMediaContext
     {
         [Parameter(Mandatory = true)]

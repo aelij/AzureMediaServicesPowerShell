@@ -21,6 +21,7 @@ using Microsoft.WindowsAzure.MediaServices.Client;
 
 namespace WindowsAzure.Commands.MediaServices
 {
+    [Cmdlet(VerbsLifecycle.Stop, "Job")]
     public class StopJobCommand : CmdletWithCloudMediaContext
     {
         [Parameter(Mandatory = true)]

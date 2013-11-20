@@ -21,6 +21,7 @@ using Microsoft.WindowsAzure.MediaServices.Client;
 
 namespace WindowsAzure.Commands.MediaServices
 {
+    [Cmdlet(VerbsCommon.Remove, "Job")]
     public class RemoveJobCommand : CmdletWithCloudMediaContext
     {
         [Parameter(Mandatory = true)]

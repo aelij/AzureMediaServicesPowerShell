@@ -21,6 +21,7 @@ using Microsoft.WindowsAzure.MediaServices.Client;
 
 namespace WindowsAzure.Commands.MediaServices
 {
+    [Cmdlet(VerbsCommon.Remove, "Asset")]
     public class RemoveAssetCommand : CmdletWithCloudMediaContext
     {
         [Parameter(Mandatory = true)]

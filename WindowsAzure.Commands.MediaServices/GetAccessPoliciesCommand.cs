@@ -15,10 +15,12 @@
 //
 #endregion
 
+using System.Management.Automation;
 using WindowsAzure.Commands.MediaServices.Utilities;
 
 namespace WindowsAzure.Commands.MediaServices
 {
+    [Cmdlet(VerbsCommon.Get, "AccessPolicies")]
     public class GetAccessPoliciesCommand : CmdletWithCloudMediaContext
     {
         public override void ExecuteCmdlet()

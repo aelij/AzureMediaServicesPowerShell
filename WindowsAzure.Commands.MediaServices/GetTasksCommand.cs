@@ -21,6 +21,7 @@ using Microsoft.WindowsAzure.MediaServices.Client;
 
 namespace WindowsAzure.Commands.MediaServices
 {
+    [Cmdlet(VerbsCommon.Get, "Tasks")]
     public class GetTasksCommand : CmdletWithCloudMediaContext
     {
         [Parameter(Mandatory = true)]
