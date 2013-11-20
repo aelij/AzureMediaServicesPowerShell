@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Management.Automation;
 using System.Runtime.Serialization;
 using System.Xml;
 using Microsoft.WindowsAzure.Commands.Utilities.Common;
@@ -29,71 +28,6 @@ namespace WindowsAzure.Commands.MediaServices.Utilities
         }
     }
 
-    [Cmdlet(VerbsCommon.Add, "MediaAccount")]
-    public class AddMediaAccountCommand : CmdletBase
-    {
-        [Parameter(Mandatory = true)]
-        [ValidateNotNullOrEmpty]
-        public string Name { get; set; }
-
-        [Parameter(Mandatory = true)]
-        [ValidateNotNullOrEmpty]
-        public string Key { get; set; }
-
-        public override void ExecuteCmdlet()
-        {
-            var accountData = new MediaAccountData { Name = Name, Key = Key };
-            CloudMediaAccountStore.Instance.Add(accountData);
-            if (CloudMediaAccount.Current == null)
-            {
-                CloudMediaAccount.Current = accountData;
-            }
-        }
-    }
-
-    [Cmdlet(VerbsCommon.Remove, "MediaAccount")]
-    public class RemoveMediaAccountCommand : CmdletBase
-    {
-        [Parameter(Mandatory = true)]
-        [ValidateNotNullOrEmpty]
-        public string Name { get; set; }
-
-        public override void ExecuteCmdlet()
-        {
-            CloudMediaAccountStore.Instance.Remove(Name);
-        }
-    }
-
-    [Cmdlet(VerbsCommon.Switch, "MediaAccount")]
-    public class SwitchMediaAccountCommand : CmdletBase
-    {
-        [Parameter(Mandatory = true)]
-        [ValidateNotNullOrEmpty]
-        public string Name { get; set; }
-
-        public override void ExecuteCmdlet()
-        {
-            var accountData = CloudMediaAccountStore.Instance.Find(Name);
-            if (accountData == null)
-            {
-                throw new InvalidOperationException("Invalid account name.");
-            }
-            CloudMediaAccount.Current = accountData;
-        }
-    }
-
-    [Cmdlet(VerbsCommon.Get, "MediaAccount")]
-    public class GetMediaAccountCommand : CmdletBase
-    {
-        public override void ExecuteCmdlet()
-        {
-            foreach (var accountData in CloudMediaAccountStore.Instance.Accounts)
-            {
-                WriteObject(accountData);
-            }
-        }
-    }
-
     [DataContract]
     internal class MediaAccountStoreData
     {
@@ -113,7 +47,21 @@ namespace WindowsAzure.Commands.MediaServices.Utilities
 
     internal class CloudMediaAccount
     {
-        public static MediaAccountData Current { get; set; }
+        private static MediaAccountData _current;
+
+        public static MediaAccountData Current
+        {
+            get
+            {
+                CloudMediaAccountStore.Instance.EnsureInitialized();
+                if (_current == null)
+                {
+                    _current = CloudMediaAccountStore.Instance.Accounts.FirstOrDefault();
+                }
+                return _current;
+            }
+            set { _current = value; }
+        }
     }
 
     internal class CloudMediaAccountStore
@@ -132,10 +80,14 @@ namespace WindowsAzure.Commands.MediaServices.Utilities
 
         private CloudMediaAccountStore()
         {
-
         }
 
         private List<MediaAccountData> _accounts;
+
+        public void EnsureInitialized()
+        {
+            EnsureLoaded();
+        }
 
         public void Add(MediaAccountData accountData)
         {
