@@ -134,9 +134,13 @@
     <Compile Include="Utilities\Constants.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="AzureMediaServices.psd1" />
+    <None Include="AzureMediaServices.psd1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
-    <None Include="WindowsAzure.Commands.MediaServices.format.ps1xml" />
+    <None Include="WindowsAzure.Commands.MediaServices.format.ps1xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

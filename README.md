@@ -1,60 +1,48 @@
-MediaServicesCommandLineTools
+AzureMediaServicesPowerShell
 =============================
 
-Tools and sample code for Windows Azure Media Services.
-
-This is experimental code that exercises the features of Windows
-Azure Media Services.
-
-Not for production use. Some bits still problematic. Use with care!
-
-Comments, feedback and patches welcome!
+Forked from Rob Blackwell MediaServicesCommandLineTools, and converted to PowerShell.
 
 Getting Started
 ---------------
 
-Build the solutions.
+Build the solution
 
-edit the ..\etc\setup.bat to include you account details.
+Run PowerShell and call Import-Module .\AzureMediaServices\AzureMediaServices.psd1
 
-Bring up a cmd.exe prompt and change into the ..\bin directory.
+Use Add-MediaAccount to set your credentials
 
 Run a command
 
-    Jobs - Lists jobs
-    Tasks <jobId> - list all the tasks taht are part of the specified job
-    Assets - Lists assets
-    AssetFiles <assetId> - Lists the files for an Asset
-    Download <fileId> - downloads a file
-    DownloadAsset <assetId> - downloads all the files for an asset
-    ToMP4 <assetId> - creates a job to convert the given asset to MP4
-    ContentKeys - list content keys
-    UploadAsset <filename> - upload and create a new asset from local file
-    TaskPresets - list the task presets
-    ErrorDetails <taskId> - Show error details of a failed task
-    StreamingUrl <assetId> - Create an Origin Locator for a SmoothStream asset
+	Add-MediaAccount
+	ConvertTo-PlayReady
+	Get-AccessPolicies
+	Get-AssetFiles
+	Get-Assets
+	Get-ContentKeys
+	Get-Jobs
+	Get-Locators
+	Get-MediaAccount
+	Get-MediaFiles
+	Get-MediaProcessors
+	Get-StreamingUrl
+	Get-TaskErrors
+	Get-TaskPreset
+	Get-Tasks
+	New-AccessPolicy
+	New-Player
+	New-SasLocator
+	Receive-Asset
+	Receive-AssetFile
+	Remove-AccessPolicy
+	Remove-Asset
+	Remove-Job
+	Remove-MediaAccount
+	Reset-MediaServices
+	Send-AssetFile
+	Send-File
+	Start-Task
+	Stop-Job
+	Switch-MediaAccount
+	Unprotect-Asset
 
-
-
-TODO
-----
-
-Test PlayReady
-
-HLS Streaming
-
-More example format conversions
-
-
-Rob Blackwell
-
-October 2012
-
-Update
----------------
-
-Changes made to reflect the new SDK.
-
-CreateAsset is now Upload Asset. 
-
-Some formats are now more tightly constrained within Azure Media Services, so task preset strings have been utilised.
