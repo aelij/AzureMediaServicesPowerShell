@@ -3,13 +3,79 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Management.Automation;
 using System.Runtime.Serialization;
 using System.Xml;
-using Microsoft.WindowsAzure.Commands.Utilities.Common;
 using Microsoft.WindowsAzure.MediaServices.Client;
 
 namespace WindowsAzure.Commands.MediaServices.Utilities
 {
+    public class CmdletBase : PSCmdlet, IDynamicParameters
+    {
+        public virtual void ExecuteCmdlet()
+        {
+        }
+
+        protected override void ProcessRecord()
+        {
+            try
+            {
+                base.ProcessRecord();
+                ExecuteCmdlet();
+            }
+            catch (Exception ex)
+            {
+                WriteExceptionError(ex);
+            }
+        }
+
+
+        protected void WriteVerboseWithTimestamp(string message, params object[] args)
+        {
+            WriteVerbose(string.Format("{0:T} - {1}", DateTime.Now, string.Format(message, args)));
+        }
+
+        protected void WriteVerboseWithTimestamp(string message)
+        {
+            WriteVerbose(string.Format("{0:T} - {1}", DateTime.Now, message));
+        }
+
+        protected void WriteDebugWithTimestamp(string message, params object[] args)
+        {
+            WriteDebug(string.Format("{0:T} - {1}", DateTime.Now, string.Format(message, args)));
+        }
+
+        protected void WriteDebugWithTimestamp(string message)
+        {
+            WriteDebug(string.Format("{0:T} - {1}", DateTime.Now, message));
+        }
+
+        protected virtual void WriteExceptionError(Exception ex)
+        {
+            WriteError(new ErrorRecord(ex, string.Empty, ErrorCategory.CloseError, null));
+        }
+
+        protected override void BeginProcessing()
+        {
+            WriteDebugWithTimestamp(string.IsNullOrEmpty(ParameterSetName)
+                ? string.Format("{0} begin processing without ParameterSet.", GetType().Name)
+                : string.Format("{0} begin processing with ParameterSet {1}.", GetType().Name, ParameterSetName));
+            base.BeginProcessing();
+        }
+
+        protected override void EndProcessing()
+        {
+            WriteDebugWithTimestamp(string.Format("{0} end processing", GetType().Name));
+            base.EndProcessing();
+        }
+
+
+        public virtual object GetDynamicParameters()
+        {
+            return null;
+        }
+    }
+
     public class CmdletWithCloudMediaContext : CmdletBase
     {
         private readonly Lazy<CloudMediaContext> _cloudMediaContext = new Lazy<CloudMediaContext>(() =>
@@ -150,7 +216,7 @@ namespace WindowsAzure.Commands.MediaServices.Utilities
             }
         }
 
-        private MediaAccountData[] Load()
+        private static MediaAccountData[] Load()
         {
             if (!File.Exists(DefaultPath))
                 return null;
@@ -167,7 +233,7 @@ namespace WindowsAzure.Commands.MediaServices.Utilities
             }
         }
 
-        private FileStream CreateTempFile(out string finalFileName)
+        private static FileStream CreateTempFile(out string finalFileName)
         {
             while (true)
             {
