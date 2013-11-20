@@ -4,8 +4,8 @@ using Microsoft.WindowsAzure.Commands.Utilities.Common;
 
 namespace WindowsAzure.Commands.MediaServices
 {
-    [Cmdlet(VerbsCommon.Get, "MediaAccount")]
-    public class GetMediaAccountCommand : CmdletBase
+    [Cmdlet(VerbsCommon.Get, Constants.CmdletNounPrefix + "Account")]
+    public class GetAccountCommand : CmdletBase
     {
         public override void ExecuteCmdlet()
         {

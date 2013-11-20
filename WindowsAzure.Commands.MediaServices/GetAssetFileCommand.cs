@@ -17,17 +17,24 @@
 
 using System.Management.Automation;
 using WindowsAzure.Commands.MediaServices.Utilities;
+using Microsoft.WindowsAzure.MediaServices.Client;
 
 namespace WindowsAzure.Commands.MediaServices
 {
-    [Cmdlet(VerbsCommon.Get, "ContentKeys")]
-    public class GetContentKeysCommand : CmdletWithCloudMediaContext
+    [Cmdlet(VerbsCommon.Get, Constants.CmdletNounPrefix + "AssetFile")]
+    public class GetAssetFileCommand : CmdletWithCloudMediaContext
     {
+        [Parameter(Mandatory = true, ValueFromPipeline = true)]
+        [ValidateNotNullOrEmpty]
+        public string AssetId { get; set; }
+
         public override void ExecuteCmdlet()
         {
-            foreach (var contentKey in CloudMediaContext.ContentKeys)
+            IAsset asset = CloudMediaContext.FindAssetById(AssetId);
+
+            foreach (var file in asset.AssetFiles)
             {
-                WriteObject(contentKey);
+                WriteObject(file);
             }
         }
     }

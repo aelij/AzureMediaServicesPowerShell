@@ -22,7 +22,7 @@ using Microsoft.WindowsAzure.MediaServices.Client;
 
 namespace WindowsAzure.Commands.MediaServices
 {
-    [Cmdlet(VerbsCommon.New, "AccessPolicy")]
+    [Cmdlet(VerbsCommon.New, Constants.CmdletNounPrefix + "AccessPolicy")]
     public class NewAccessPolicyCommand : CmdletWithCloudMediaContext
     {
         [Parameter(Mandatory = true)]

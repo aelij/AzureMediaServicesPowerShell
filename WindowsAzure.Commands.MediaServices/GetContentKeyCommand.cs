@@ -17,24 +17,17 @@
 
 using System.Management.Automation;
 using WindowsAzure.Commands.MediaServices.Utilities;
-using Microsoft.WindowsAzure.MediaServices.Client;
 
 namespace WindowsAzure.Commands.MediaServices
 {
-    [Cmdlet(VerbsCommon.Get, "Tasks")]
-    public class GetTasksCommand : CmdletWithCloudMediaContext
+    [Cmdlet(VerbsCommon.Get, Constants.CmdletNounPrefix + "ContentKey")]
+    public class GetContentKeyCommand : CmdletWithCloudMediaContext
     {
-        [Parameter(Mandatory = true)]
-        [ValidateNotNullOrEmpty]
-        public string JobId { get; set; }
-
         public override void ExecuteCmdlet()
         {
-            IJob job = CloudMediaContext.FindJobById(JobId);
-
-            foreach (var task in job.Tasks)
+            foreach (var contentKey in CloudMediaContext.ContentKeys)
             {
-                WriteObject(task);
+                WriteObject(contentKey);
             }
         }
     }

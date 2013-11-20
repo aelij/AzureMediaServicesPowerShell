@@ -20,7 +20,7 @@ using WindowsAzure.Commands.MediaServices.Utilities;
 
 namespace WindowsAzure.Commands.MediaServices
 {
-    [Cmdlet(VerbsCommon.Get, "TaskPreset")]
+    [Cmdlet(VerbsCommon.Get, Constants.CmdletNounPrefix + "TaskPresets")]
     public class GetTaskPresetsCommand : CmdletWithCloudMediaContext
     {
         public override void ExecuteCmdlet()

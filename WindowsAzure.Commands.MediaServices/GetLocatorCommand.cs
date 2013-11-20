@@ -20,8 +20,8 @@ using WindowsAzure.Commands.MediaServices.Utilities;
 
 namespace WindowsAzure.Commands.MediaServices
 {
-    [Cmdlet(VerbsCommon.Get, "Locators")]
-    public class GetLocatorsCommand : CmdletWithCloudMediaContext
+    [Cmdlet(VerbsCommon.Get, Constants.CmdletNounPrefix + "Locator")]
+    public class GetLocatorCommand : CmdletWithCloudMediaContext
     {
         public override void ExecuteCmdlet()
         {

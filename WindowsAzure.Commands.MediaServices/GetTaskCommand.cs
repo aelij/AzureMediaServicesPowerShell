@@ -21,20 +21,20 @@ using Microsoft.WindowsAzure.MediaServices.Client;
 
 namespace WindowsAzure.Commands.MediaServices
 {
-    [Cmdlet(VerbsCommon.Get, "TaskErrors")]
-    public class GetTaskErrorsCommand : CmdletWithCloudMediaContext
+    [Cmdlet(VerbsCommon.Get, Constants.CmdletNounPrefix + "Task")]
+    public class GetTaskCommand : CmdletWithCloudMediaContext
     {
         [Parameter(Mandatory = true)]
         [ValidateNotNullOrEmpty]
-        public string TaskId { get; set; }
+        public string JobId { get; set; }
 
         public override void ExecuteCmdlet()
         {
-            ITask task = CloudMediaContext.FindTaskById(TaskId);
+            IJob job = CloudMediaContext.FindJobById(JobId);
 
-            foreach (var errorDetail in task.ErrorDetails)
+            foreach (var task in job.Tasks)
             {
-                WriteObject(errorDetail);
+                WriteObject(task);
             }
         }
     }

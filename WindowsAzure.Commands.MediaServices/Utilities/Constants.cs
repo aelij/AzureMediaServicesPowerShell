@@ -19,6 +19,8 @@ namespace WindowsAzure.Commands.MediaServices.Utilities
 {
     public class Constants
     {
+        public const string CmdletNounPrefix = "AzureMedia";
+
         // Retrieved from http://msdn.microsoft.com/en-us/library/windowsazure/jj129582.aspx 20130319
         public static string[] TaskPresets =
         {

@@ -15,20 +15,28 @@
 //
 #endregion
 
+using System;
 using System.Management.Automation;
 using WindowsAzure.Commands.MediaServices.Utilities;
+using Microsoft.WindowsAzure.MediaServices.Client;
 
 namespace WindowsAzure.Commands.MediaServices
 {
-    [Cmdlet(VerbsCommon.Get, "MediaProcessors")]
-    public class GetMediaProcessorsCommand : CmdletWithCloudMediaContext
+    [Cmdlet(VerbsCommon.New, Constants.CmdletNounPrefix + "Locator")]
+    public class NewLocatorCommand : CmdletWithCloudMediaContext
     {
+        [Parameter(Mandatory = true)]
+        [ValidateNotNullOrEmpty]
+        public string AssetId { get; set; }
+
         public override void ExecuteCmdlet()
         {
-            foreach (var processor in CloudMediaContext.MediaProcessors)
-            {
-                WriteObject(processor);
-            }
+            IAsset asset = CloudMediaContext.FindAssetById(AssetId);
+
+            IAccessPolicy accessPolicy = CloudMediaContext.AccessPolicies.Create("File Download Policy", TimeSpan.FromDays(30), AccessPermissions.Read);
+            ILocator locator = CloudMediaContext.Locators.CreateSasLocator(asset, accessPolicy);
+
+            WriteObject(locator);
         }
     }
 }

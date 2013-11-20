@@ -20,14 +20,14 @@ using WindowsAzure.Commands.MediaServices.Utilities;
 
 namespace WindowsAzure.Commands.MediaServices
 {
-    [Cmdlet(VerbsCommon.Get, "Assets")]
-    public class GetAssetsCommand : CmdletWithCloudMediaContext
+    [Cmdlet(VerbsCommon.Get, Constants.CmdletNounPrefix + "Processor")]
+    public class GetProcessorCommand : CmdletWithCloudMediaContext
     {
         public override void ExecuteCmdlet()
         {
-            foreach (var asset in CloudMediaContext.Assets)
+            foreach (var processor in CloudMediaContext.MediaProcessors)
             {
-                WriteObject(asset);
+                WriteObject(processor);
             }
         }
     }

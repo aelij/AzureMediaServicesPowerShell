@@ -5,7 +5,7 @@ using Microsoft.WindowsAzure.MediaServices.Client;
 
 namespace WindowsAzure.Commands.MediaServices
 {
-    [Cmdlet(VerbsCommunications.Send, "File")]
+    [Cmdlet(VerbsCommunications.Send, Constants.CmdletNounPrefix + "File")]
     public class SendFileCommand : CmdletWithCloudMediaContext
     {
         [Parameter(Mandatory = true)]

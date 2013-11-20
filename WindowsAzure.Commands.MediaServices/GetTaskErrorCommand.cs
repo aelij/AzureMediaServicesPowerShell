@@ -17,17 +17,24 @@
 
 using System.Management.Automation;
 using WindowsAzure.Commands.MediaServices.Utilities;
+using Microsoft.WindowsAzure.MediaServices.Client;
 
 namespace WindowsAzure.Commands.MediaServices
 {
-    [Cmdlet(VerbsCommon.Get, "MediaFiles")]
-    public class GetMediaFilesCommand : CmdletWithCloudMediaContext
+    [Cmdlet(VerbsCommon.Get, Constants.CmdletNounPrefix + "TaskError")]
+    public class GetTaskErrorCommand : CmdletWithCloudMediaContext
     {
+        [Parameter(Mandatory = true)]
+        [ValidateNotNullOrEmpty]
+        public string TaskId { get; set; }
+
         public override void ExecuteCmdlet()
         {
-            foreach (var file in CloudMediaContext.Files)
+            ITask task = CloudMediaContext.FindTaskById(TaskId);
+
+            foreach (var errorDetail in task.ErrorDetails)
             {
-                WriteObject(file);
+                WriteObject(errorDetail);
             }
         }
     }

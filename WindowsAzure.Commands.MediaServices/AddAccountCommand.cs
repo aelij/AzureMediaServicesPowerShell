@@ -4,8 +4,8 @@ using Microsoft.WindowsAzure.Commands.Utilities.Common;
 
 namespace WindowsAzure.Commands.MediaServices
 {
-    [Cmdlet(VerbsCommon.Add, "MediaAccount")]
-    public class AddMediaAccountCommand : CmdletBase
+    [Cmdlet(VerbsCommon.Add, Constants.CmdletNounPrefix + "Account")]
+    public class AddAccountCommand : CmdletBase
     {
         [Parameter(Mandatory = true)]
         [ValidateNotNullOrEmpty]

@@ -26,7 +26,7 @@ namespace WindowsAzure.Commands.MediaServices
     /// Clears down a media services account prior to demo
     /// USE WITH CARE
     /// </summary>
-    [Cmdlet(VerbsCommon.Reset, "MediaServices", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.High)]
+    [Cmdlet(VerbsCommon.Reset, Constants.CmdletNounPrefix + "Services", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.High)]
     public class ResetMediaServicesCommand : CmdletWithCloudMediaContext
     {
         public override void ExecuteCmdlet()

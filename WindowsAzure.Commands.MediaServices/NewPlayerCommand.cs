@@ -28,7 +28,7 @@ namespace WindowsAzure.Commands.MediaServices
     /// Creates an Origin locator for a streaming asset and creates
     /// an HTML file that wraps a Silverlight Player to play it.
     /// </summary>
-    [Cmdlet(VerbsCommon.New, "Player")]
+    [Cmdlet(VerbsCommon.New, Constants.CmdletNounPrefix + "Player")]
     public class NewPlayerCommand : CmdletWithCloudMediaContext
     {
         [Parameter(Mandatory = true)]

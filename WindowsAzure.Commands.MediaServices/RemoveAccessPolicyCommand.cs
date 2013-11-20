@@ -21,7 +21,7 @@ using Microsoft.WindowsAzure.MediaServices.Client;
 
 namespace WindowsAzure.Commands.MediaServices
 {
-    [Cmdlet(VerbsCommon.Remove, "AccessPolicy")]
+    [Cmdlet(VerbsCommon.Remove, Constants.CmdletNounPrefix + "AccessPolicy")]
     public class RemoveAccessPolicyCommand : CmdletWithCloudMediaContext
     {
         [Parameter(Mandatory = true)]

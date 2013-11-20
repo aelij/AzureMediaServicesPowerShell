@@ -5,8 +5,8 @@ using Microsoft.WindowsAzure.Commands.Utilities.Common;
 
 namespace WindowsAzure.Commands.MediaServices
 {
-    [Cmdlet(VerbsCommon.Switch, "MediaAccount")]
-    public class SwitchMediaAccountCommand : CmdletBase
+    [Cmdlet(VerbsCommon.Switch, Constants.CmdletNounPrefix + "Account")]
+    public class SwitchAccountCommand : CmdletBase
     {
         [Parameter(Mandatory = true)]
         [ValidateNotNullOrEmpty]

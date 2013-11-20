@@ -8,8 +8,8 @@ using Microsoft.WindowsAzure.MediaServices.Client;
 
 namespace WindowsAzure.Commands.MediaServices
 {
-    [Cmdlet(VerbsLifecycle.Start, "Task")]
-    public class StartTaskCommand : CmdletWithCloudMediaContext
+    [Cmdlet(VerbsLifecycle.Start, Constants.CmdletNounPrefix + "Job")]
+    public class StartJobCommand : CmdletWithCloudMediaContext
     {
         [Parameter(Mandatory = true)]
         [ValidateNotNullOrEmpty]
@@ -60,8 +60,6 @@ namespace WindowsAzure.Commands.MediaServices
 
             IJob job = CloudMediaContext.Jobs.Create("Run Task");
 
-
-
             string configuration = File.ReadAllText(PresetFile.FullName);
 
             ITask task = job.Tasks.AddNew("My Task",
@@ -69,14 +67,9 @@ namespace WindowsAzure.Commands.MediaServices
                 configuration,
                TaskOptions.None);
 
-            // Specify the input asset to be encoded.
             task.InputAssets.Add(asset);
-            // Add an output asset to contain the results of the job. Since the
-            // asset is already protected with PlayReady, we won't encrypt. 
-            task.OutputAssets.AddNew("Output asset",
-                AssetCreationOptions.None);
+            task.OutputAssets.AddNew("Output asset", AssetCreationOptions.None);
 
-            // Launch the job. 
             job.Submit();
 
             WriteObject(job);

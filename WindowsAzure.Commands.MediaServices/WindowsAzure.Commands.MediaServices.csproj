@@ -83,49 +83,49 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddMediaAccountCommand.cs" />
+    <Compile Include="AddAccountCommand.cs" />
     <Compile Include="ConvertToPlayReadyCommand.cs" />
     <Compile Include="GetAccessPoliciesCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GetAssetFilesCommand.cs" />
-    <Compile Include="GetAssetsCommand.cs" />
-    <Compile Include="GetContentKeysCommand.cs">
+    <Compile Include="GetAssetFileCommand.cs" />
+    <Compile Include="GetAssetCommand.cs" />
+    <Compile Include="GetContentKeyCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GetJobsCommand.cs" />
-    <Compile Include="GetLocatorsCommand.cs">
+    <Compile Include="GetJobCommand.cs" />
+    <Compile Include="GetLocatorCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GetMediaAccountCommand.cs" />
-    <Compile Include="GetMediaFilesCommand.cs">
+    <Compile Include="GetAccountCommand.cs" />
+    <Compile Include="GetFileCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GetMediaProcessorsCommand.cs">
+    <Compile Include="GetProcessorCommand.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="GetStreamingUrlCommand.cs" />
-    <Compile Include="GetTaskErrorsCommand.cs" />
+    <Compile Include="GetTaskErrorCommand.cs" />
     <Compile Include="GetTaskPresetsCommand.cs" />
-    <Compile Include="GetTasksCommand.cs" />
+    <Compile Include="GetTaskCommand.cs" />
     <Compile Include="NewAccessPolicyCommand.cs" />
     <Compile Include="NewPlayerCommand.cs" />
-    <Compile Include="NewSasLocatorCommand.cs" />
+    <Compile Include="NewLocatorCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReceiveAssetCommand.cs" />
     <Compile Include="ReceiveAssetFileCommand.cs" />
     <Compile Include="RemoveAccessPolicyCommand.cs" />
     <Compile Include="RemoveAssetCommand.cs" />
     <Compile Include="RemoveJobCommand.cs" />
-    <Compile Include="RemoveMediaAccountCommand.cs" />
+    <Compile Include="RemoveAccountCommand.cs" />
     <Compile Include="ResetMediaServicesCommand.cs" />
     <Compile Include="SendAssetFileCommand.cs" />
     <Compile Include="SendFileCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="StartTaskCommand.cs" />
+    <Compile Include="StartJobCommand.cs" />
     <Compile Include="StopJobCommand.cs" />
-    <Compile Include="SwitchMediaAccountCommand.cs" />
+    <Compile Include="SwitchAccountCommand.cs" />
     <Compile Include="UnprotectAssetCommand.cs" />
     <Compile Include="Utilities\CloudMediaExtensions.cs" />
     <Compile Include="Utilities\CmdletWithCloudMediaContext.cs">

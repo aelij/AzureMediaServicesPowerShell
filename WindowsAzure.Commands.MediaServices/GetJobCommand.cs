@@ -15,28 +15,20 @@
 //
 #endregion
 
-using System;
 using System.Management.Automation;
 using WindowsAzure.Commands.MediaServices.Utilities;
-using Microsoft.WindowsAzure.MediaServices.Client;
 
 namespace WindowsAzure.Commands.MediaServices
 {
-    [Cmdlet(VerbsCommon.New, "SasLocator")]
-    public class NewSasLocatorCommand : CmdletWithCloudMediaContext
+    [Cmdlet(VerbsCommon.Get, Constants.CmdletNounPrefix + "Job")]
+    public class GetJobCommand : CmdletWithCloudMediaContext
     {
-        [Parameter(Mandatory = true)]
-        [ValidateNotNullOrEmpty]
-        public string AssetId { get; set; }
-
         public override void ExecuteCmdlet()
         {
-            IAsset asset = CloudMediaContext.FindAssetById(AssetId);
-
-            IAccessPolicy accessPolicy = CloudMediaContext.AccessPolicies.Create("File Download Policy", TimeSpan.FromDays(30), AccessPermissions.Read);
-            ILocator locator = CloudMediaContext.Locators.CreateSasLocator(asset, accessPolicy);
-
-            WriteObject(locator);
+            foreach (var job in CloudMediaContext.Jobs)
+            {
+                WriteObject(job);
+            }
         }
     }
 }

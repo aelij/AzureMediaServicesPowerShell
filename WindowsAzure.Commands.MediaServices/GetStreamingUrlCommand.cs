@@ -21,7 +21,7 @@ using Microsoft.WindowsAzure.MediaServices.Client;
 
 namespace WindowsAzure.Commands.MediaServices
 {
-    [Cmdlet(VerbsCommon.Get, "StreamingUrl")]
+    [Cmdlet(VerbsCommon.Get, Constants.CmdletNounPrefix + "StreamingUrl")]
     public class GetStreamingUrlCommand : CmdletWithCloudMediaContext
     {
         [Parameter(Mandatory = true)]

@@ -4,8 +4,8 @@ using Microsoft.WindowsAzure.Commands.Utilities.Common;
 
 namespace WindowsAzure.Commands.MediaServices
 {
-    [Cmdlet(VerbsCommon.Remove, "MediaAccount")]
-    public class RemoveMediaAccountCommand : CmdletBase
+    [Cmdlet(VerbsCommon.Remove, Constants.CmdletNounPrefix + "Account")]
+    public class RemoveAccountCommand : CmdletBase
     {
         [Parameter(Mandatory = true)]
         [ValidateNotNullOrEmpty]
